@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome to Firebase Hosting</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script type="text/javascript">
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1235344773217239',
+          xfbml      : true,
+          version    : 'v2.1'
+        });
+
+        FB.getLoginStatus(function(response) {
+          var path = window.location.pathname;
+          if(response.authResponse) {
+            if (path=='/') {
+              window.location.href = '/profile';
+            }
+            // Display Profile
+            
+          }
+          console.log(response);
+        });
+
+
+        FB.login(function(response) {
+            if (response.authResponse) {
+              // console.log('Welcome!  Fetching your information.... ');
+              FB.api('/me', function(response) {
+                console.log('Good to see you, ' + response.name + '.');
+              });
+            } else {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+        },{scope:'id,name,user_birthday,user_about_me,user_email,user_work_history'});
+
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1235344773217239";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));      
+    </script>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">SJI Batch '98</a>
+        </div>
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2">
+            <img src="/assets/images/logo.png" class="img-thumbnail"/>
+        </div>
+        <div class="col-md-10">
+            <h1>SJI Batch '98</h1>
+            <p>Login if you are part of SJI Batch '98</p>
+            <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
