@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>SJI '98 | Dashboard</title>
+    <title>SJI '98 | Profile</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -33,7 +33,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Username <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="profile.html">Profile</a></li>
+                <li class="active"><a href="profile.html">Profile</a></li>
                 <li><a href="#">Facebook Profile</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="logout.html">Logout</a></li>
@@ -42,8 +42,38 @@
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
-    </nav>  
-    <div class="container-fluid">
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <img src="/assets/images/placeholder.png" class="img-thumbnail" style="width:100%" />
+          <hr/>
+          <div class="btn-toolbar">
+            <a href="pay-homecoming.html" class="btn btn-default btn-lg btn-block">Pay Homecoming</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <form method="post" action="">
+            <div class="form-group">
+              <label for="price"></label>
+              <div class="input-group">
+                <span class="input-group-addon">P</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </body>
+  <script type="text/javascript">
+    $(function() {
+      'use strict';
+
+      $('#profile-tabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+      });
+
+    });
+  </script>
 </html>

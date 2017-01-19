@@ -5,6 +5,6 @@
   "hosting": {
     "public": "public",
     "cleanUrls": true,
-    "trailingSlash": true
+    "trailingSlash": false
   }
 }
