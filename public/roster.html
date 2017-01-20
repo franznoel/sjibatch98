@@ -6,6 +6,19 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      // TODO: Replace with your project's customized code snippet
+      var config = {
+        apiKey: "AIzaSyC-H_ws7WPkLU9ax6Ge7SKFgh1pil4vCD8",
+        authDomain: "sjibatch98.firebaseapp.com",
+        databaseURL: "https://sjibatch98.firebaseio.com",
+        storageBucket: "sjibatch98.appspot.com",
+        messagingSenderId: "33808654629",
+      };
+      firebase.initializeApp(config);
+    </script>
     <style media="screen">
     </style>
   </head>
@@ -36,13 +49,13 @@
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="#">Facebook Profile</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="logout.html">Logout</a></li>
+                <li><a href="#logout" id="signOut">Logout</a></li>
               </ul>
             </li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
-    </nav>
+    </nav>  
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-4">
@@ -90,6 +103,39 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div><!-- #container-fluid -->
   </body>
+  <script type="text/javascript">
+  var checkAuth = function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) { // User is signed in.
+        // console.log(user);
+      } else { // No user is signed in.
+        console.log('No user signed in.');
+        window.location.href='/';
+      }
+    });
+  }
+
+  var signOut = function() {
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+      window.location.href='/logout.html';
+    }, function(error) {
+      // An error happened.
+      console.log('Error:',error);
+    });
+  }  
+
+  $(document).ready(function() {
+    'use strict';
+
+    $('#signOut').click(function(e) {
+      e.preventDefault();
+      signOut();
+    });
+
+    checkAuth();
+  });
+  </script>
 </html>
