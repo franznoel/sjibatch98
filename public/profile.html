@@ -44,10 +44,10 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Username <span class="caret"></span></a>
+              <a href="#" id="username" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Username <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li class="active"><a href="profile.html">Profile</a></li>
-                <li><a href="#">Facebook Profile</a></li>
+                <li><a href="#facebook-profile" id="facebook-profile" target="_blank">Facebook Profile</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#logout" id="signOut">Logout</a></li>
               </ul>
@@ -59,7 +59,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3">
-          <img src="/assets/images/placeholder.png" class="img-thumbnail" style="width:100%" />
+          <img id="default-image" src="/assets/images/placeholder.png" class="img-thumbnail" style="width:100%" />
           <hr/>
           <form method="post" action="pay-homecoming.html">
             <div class="input-group">
@@ -67,7 +67,7 @@
               <input type="number" name="payment" class="form-control input-lg" value="12500" placeholder="Amount" />
             </div>
             <br/>
-            <input type="submit" class="btn btn-default btn-lg btn-block" value="Pay Homecoming"/>
+            <input type="submit" class="btn btn-success btn-lg btn-block" value="Pay Homecoming"/>
           </form>
         </div>
         <div class="col-md-9">
@@ -82,12 +82,8 @@
               <h3>Info</h3>
               <form method="post" action="">
                 <div class="form-group">
-                  <label for="firstname">First Name</label>
-                  <input type="text" id="firstname" name="firstname" class="form-control" value="" placeholder="First Name" />
-                </div>
-                <div class="form-group">
-                  <label for="lastname">Last Name</label>
-                  <input type="text" id="lastname" name="lastname" class="form-control" value="" placeholder="Last Name" />
+                  <label for="displayName">Full Name</label>
+                  <input type="text" id="displayName" name="displayName" class="form-control" value="" placeholder="Full Name" disabled/>
                 </div>
                 <div class="row">
                   <div class="col-md-4">
@@ -105,7 +101,7 @@
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="email">Email</label>
-                      <input type="text" id="email" name="email" class="form-control" value="" placeholder="Email" />
+                      <input type="text" id="email" name="email" class="form-control" value="" placeholder="Email" disabled/>
                     </div>
                   </div>
                 </div>
@@ -182,28 +178,8 @@
       </div>
     </div>
   </body>
+  <script type="text/javascript" src="/assets/js/scripts.js"></script>
   <script type="text/javascript">
-  var checkAuth = function() {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) { // User is signed in.
-        console.log(user);
-      } else { // No user is signed in.
-        console.log('No user signed in.');
-        window.location.href='/';
-      }
-    });
-  }
-
-  var signOut = function() {
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-      window.location.href='/logout.html';
-    }, function(error) {
-      // An error happened.
-      console.log('Error:',error);
-    });
-  }
-
   $(document).ready(function() {
     'use strict';
 
