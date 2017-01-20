@@ -41,7 +41,7 @@
                   <input type="password" id="password" class="form-control" name="password" value="" placeholder="Password"/>
                 </div>
                 <input type="submit" class="btn btn-primary" name="submit" value="Login" />
-                <a href="#facebook" class="btn btn-default">Facebook Login</a>
+                <a href="#facebook" id="facebookLogin" class="btn btn-default">Facebook Login</a>
               </form>
             </div>
           </div>
@@ -50,6 +50,25 @@
     </div>
   </body>
   <script type="text/javascript">
+  var fbProvider = new firebase.auth.FacebookAuthProvider();
+  fbProvider.addScope('user_birthday,email,public_profile,user_photos,user_education_history,user_about_me,user_hometown');
+
+  var facebookLogin = function() {
+    firebase.auth().signInWithPopup(fbProvider).then(function(result) {
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      var token = result.credential.accessToken;
+      var user = result.user;
+      console.log('Successfully logged in with Facebook.');
+      window.location.href='/dashboard.html';
+    }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+      console.log('Error: ',errorCode,errorMessage);
+    });
+  };
+
   var emailLogin = function() {
     var email = $('#email').val(),
         password = $('#password').val();
@@ -60,7 +79,7 @@
       var errorMessage = error.message;
       // console.log(errorCode,errorMessage);
     });
-  }
+  };
 
   var checkAuth = function() {
     firebase.auth().onAuthStateChanged(function(user) {
@@ -71,7 +90,7 @@
         console.log('No user signed in.');
       }
     });
-  }
+  };
 
   $(document).ready(function() {
     'use strict';
@@ -80,6 +99,11 @@
       e.preventDefault();
       console.log('Email login...');
       emailLogin();
+    });
+
+    $('#facebookLogin').click(function(e) {
+      e.preventDefault();
+      facebookLogin();
     });
 
     checkAuth();
