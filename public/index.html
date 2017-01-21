@@ -56,21 +56,17 @@
       </div>
     </div>
   </body>
+  <script type="text/javascript" src="/assets/js/cookie.js"></script>
   <script type="text/javascript">
   var provider = new firebase.auth.FacebookAuthProvider();
-  provider.addScope('user_birthday,email,user_education_history,user_about_me,user_hometown');
+  provider.addScope('user_birthday,email,user_education_history,user_work_history,user_about_me,user_hometown,user_location');
 
-// id,name,birthday,education,hometown,location,about,first_name,last_name
   var facebookLogin = function() {
     firebase.auth().signInWithPopup(provider).then(function(result) {
       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
       var token = result.credential.accessToken;
-      var user = JSON.parse(JSON.stringify(result));
-      // TODO: Save the access_token in a cookie to retrieve the scope of the user.
-      console.log(token);
-      console.log(user.current);
+      setCookie('token',token);
       console.log('Successfully logged in with Facebook.');
-      window.location.href='/dashboard.html';
     }).catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -101,8 +97,8 @@
 
   var checkAuth = function() {
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) { // User is signed in.
-        // console.log(user);
+      var token = getCookie('token');
+      if (user && token) { // User is signed in.
         window.location.href='/profile.html';
       } else { // No user is signed in.
         console.log('No user signed in.');

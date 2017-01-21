@@ -7,33 +7,49 @@ var checkAuth = function() {
       var user = JSON.parse(JSON.stringify(user)),
         accessToken = user.stsTokenManager.accessToken;
 
-      console.log(user);
+      var path = window.location.pathname;
 
-      // $.ajax({
-      //   url: 'https://graph.facebook.com/v2.8/me',
-      //   data: {
-      //     'access_token': user.uid,
-      //     'fields': 'user_birthday,user_hometown,user_location,user_education_history,user_work_history,user_about_me,user_status,read_page_mailboxes,email,manage_pages,public_profile'
-      //   },
-      //   success: function(response) {
-      //     console.log(response);
-      //   }
-      // })
-
-      // console.log(user);
-      $('#email').val(user.email);
-      $('#displayName').val(user.displayName);
-      $('#username').html(user.email+'<span class="caret"></span>');
-      $('#facebook-profile').attr('href','https://www.facebook.com/'+user.providerData[0].uid)
-      // console.log(user_json);
-      // console.log(user.credential.accessToken);
-      $('#default-image').attr('src',user.photoURL);
+      switch(path) {
+        case '/profile':
+        case '/profile/':
+        case '/profile.html':
+          displayProfile();
+          break;
+      }
 
     } else { // No user is signed in.
       console.log('No user signed in.');
       window.location.href='/';
     }
   });
+}
+
+var displayProfile = function() {
+  var params = '?fields=id,name,first_name,last_name,email,birthday,hometown,location,about,education,work';
+      params+= '&access_token=' + getCookie('token');
+
+  fetch('https://graph.facebook.com/v2.8/me'+params,{
+      method: 'GET',
+      headers: new Headers(),
+      mode: 'cors',
+      cache: 'default',
+    }).then(function(response) {
+      return response.json();
+    }).then(function(json_response) {
+      console.log('Profile:',json_response);
+      var user = json_response;
+      $('#email').val(user.email);
+      $('#displayName').val(user.displayName);
+      $('#birthdate').val(user.hometown.name);
+      $('#hometown').val(user.hometown.name);
+      $('#location').val(user.location.name);
+      $('#about').val(user.about);
+      $('#username').html(user.email+'<span class="caret"></span>');
+      $('#facebook-profile').attr('href','https://www.facebook.com/'+user.id)
+      // $('#default-image').attr('src',user.photoURL);
+    }).catch(function(response) {
+      console.log('Error: ',response);
+    });
 }
 
 var signOut = function() {
