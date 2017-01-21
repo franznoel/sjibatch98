@@ -1,6 +1,6 @@
 var checkAuth = function() {
   var auth = firebase.auth();
-  console.log(auth);
+  // console.log(auth);
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) { // User is signed in.
@@ -38,13 +38,13 @@ var displayProfile = function() {
     }).then(function(json_response) {
       console.log('Profile:',json_response);
       var user = json_response;
-      $('#email').val(user.email);
-      $('#displayName').val(user.displayName);
-      $('#birthdate').val(user.hometown.name);
-      $('#hometown').val(user.hometown.name);
-      $('#location').val(user.location.name);
-      $('#about').val(user.about);
-      $('#username').html(user.email+'<span class="caret"></span>');
+      $('#email').text(user.email);
+      $('#fullName').text(user.name);
+      $('#birthdate').text(user.birthday);
+      $('#hometown').text(user.hometown.name);
+      $('#location').text(user.location.name);
+      $('#about').text(user.about);
+      $('#username').html('Hello, '+ user.name +'<span class="caret"></span>');
       $('#facebook-profile').attr('href','https://www.facebook.com/'+user.id)
       // $('#default-image').attr('src',user.photoURL);
     }).catch(function(response) {
