@@ -46,6 +46,19 @@ var displayProfile = function() {
       $('#about').text(user.about);
       $('#username').html('Hello, '+ user.name +'<span class="caret"></span>');
       $('#facebook-profile').attr('href','https://www.facebook.com/'+user.id)
+
+      var work_info = user.work
+      if (work_info) {
+        var workHtml = '';
+        for(var i=0;i<work_info.length;i++) {
+          var w = work_info[i];
+          workHtml+= '<h3>'+ w.employer.name +' <small>'+ w.location.name +'</small></h3>';
+          workHtml+= '<div>'+ w.position.name +' </div>';
+          workHtml+= '<p>Start Date: '+ w.start_date +'</p>'
+          workHtml+= '<hr/>';
+        }
+        $('#professions').html(workHtml);
+      }
       // $('#default-image').attr('src',user.photoURL);
     }).catch(function(response) {
       console.log('Error: ',response);
