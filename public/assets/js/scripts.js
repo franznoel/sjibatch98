@@ -14,6 +14,11 @@ var checkAuth = function() {
         case '/profile.html':
           displayProfile();
           break;
+        case '/roster':
+        case '/roster/':
+        case '/roster.html':
+          displayRoster();
+          break;
       }
 
     } else { // No user is signed in.
@@ -30,7 +35,6 @@ var displayProfile = function() {
 
   getProfile(params,access_token);
 }
-
 
 var getProfile = function(params,access_token) {
   fetch('https://graph.facebook.com/v2.8/me'+params,{
@@ -113,6 +117,7 @@ var updateUser = function(user) {
 var signOut = function() {
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
+    remove
     window.location.href='/logout.html';
   }, function(error) {
     // An error happened.
@@ -122,4 +127,26 @@ var signOut = function() {
 
 var facebookSignOut = function() {
   FirebaseAuth.getInstance().signOut();    
+}
+
+// Roster
+var displayRoster = function() {
+  var membersQuery = firebase.database().ref("members");
+
+  membersQuery.once("value")
+    .then(function(members) {
+      var membersHtml = '';
+      members.forEach(function(snapshot) {
+        var member = snapshot.val();
+        membersHtml+= '<tr data-key="'+ member.id +'">';
+        membersHtml+= '<td>'+ member.name +'</td>';
+        membersHtml+= '<td>'+ member.hometown.name +'</td>';
+        membersHtml+= '<td>'+ member.location.name +'</td>';
+        membersHtml+= '<td>'+ member.birthday +'</td>';
+        membersHtml+= '<td>'+ member.work[0].position.name +'</td>';
+        membersHtml+= '</tr>';
+      })
+      $('#members-table tbody').html(membersHtml);
+    });
+
 }
