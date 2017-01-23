@@ -41,7 +41,6 @@ var getProfile = function(params,access_token) {
     }).then(function(response) {
       return response.json();
     }).then(function(json_response) {
-      console.log('Profile:',json_response);
       var user = json_response;
       getProfilePicture(user.id,access_token);
       $('#email').text(user.email);
@@ -79,6 +78,7 @@ var getProfile = function(params,access_token) {
         }
         $('#education').html(eduHtml);
       }
+      updateUser(user);
     }).catch(function(response) {
       console.log('Error: ',response);
     });  
@@ -101,6 +101,14 @@ var getProfilePicture = function(id,token) {
     });
 }
 
+var updateUser = function(user) {
+  var member = user;
+  var memberKey = firebase.database().ref().child('members').push().key;
+  var memberUpdates = {};
+  memberUpdates['/members/'+user.id] = member;
+
+  return firebase.database().ref().update(memberUpdates);
+}
 
 var signOut = function() {
   firebase.auth().signOut().then(function() {
