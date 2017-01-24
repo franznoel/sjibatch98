@@ -58,20 +58,17 @@
     </nav>
     <div class="container">
       <div class="row">
-        <div class="col-md-2">
-          <img id="default-image" src="/assets/images/placeholder.png" class="img-thumbnail" style="width:100%" />
-          <hr/>
-          <form method="post" action="pay-homecoming.html">
-            <div class="input-group">
-              <span class="input-group-addon">&#8369;</span>
-              <input type="number" name="payment" class="form-control input-lg" value="12500" placeholder="Amount" />
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-1 col-sm-2">
+              <img id="default-image" src="/assets/images/placeholder.png" class="img-thumbnail" style="width:100%" />
             </div>
-            <br/>
-            <input type="submit" class="btn btn-success btn-block" value="Pay Homecoming"/>
-          </form>
-        </div>
-        <div class="col-md-10">
-          <h3 id="fullName">Info</h3>        
+            <div class="col-md-11 col-sm-10">
+              <h3 id="fullName" style="padding:0;margin:0 0 5px 0;">Info</h3>
+              <a href="#payHomecomingModal" class="btn btn-success" data-target="#payHomecomingModal" data-toggle="modal">Pay Homecoming</a>
+            </div>
+          </div>
+          <br/>
           <ul id="profile-tabs" class="nav nav-tabs">
             <li class="active"><a href="#info-tab">Info</a></li>
             <li><a href="#profession-tab">Profession</a></li>
@@ -150,6 +147,32 @@
         </div>
       </div>
     </div>
+
+    <!-- modal -->
+    <div id="payHomecomingModal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <form id="payHomecomingForm" method="post" action="pay-homecoming.html">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Pay Homecoming<h4>
+            </div>
+            <div class="modal-body">
+              <div class="input-group">
+                <span class="input-group-addon">&#8369;</span>
+                <input type="number" name="payment" class="form-control input-lg" value="12500" placeholder="Amount" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-success">Pay Homecoming</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </form>
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
   </body>
   <script type="text/javascript" src="/assets/js/scripts.js"></script>
   <script type="text/javascript" src="/assets/js/cookie.js"></script>
