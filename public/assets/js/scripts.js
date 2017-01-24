@@ -119,8 +119,8 @@ var displayProfile = function() {
   var access_token = getCookie('token');
     params = '?fields=id,name,photos,first_name,last_name,email,birthday,hometown,location,about,education,work,picture';
     params+= '&access_token=' + access_token,
-    userId = getCookie('userId');
-
+    userId = getCookie('userId'),
+    currentUser = firebase.auth().currentUser;
 
   initNavBar();
 
@@ -155,6 +155,7 @@ var displayProfile = function() {
 
         setUserCookie(user);
 
+        user['uid'] = currentUser.uid;
         updateUser(user);
       }).catch(function(response) {
         console.log('Error: ',response);
@@ -175,6 +176,7 @@ var displayRoster = function() {
         var member = snapshot.val();
         membersHtml+= '<tr data-key="'+ member.id +'" style="cursor:pointer;">';
         membersHtml+= '<td>'+ member.name +'</td>';
+        membersHtml+= '<td>'+ member.email +'</td>';
         membersHtml+= '<td>'+ member.hometown.name +'</td>';
         membersHtml+= '<td>'+ member.location.name +'</td>';
         membersHtml+= '<td>'+ member.birthday +'</td>';
