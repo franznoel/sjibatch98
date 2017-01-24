@@ -115,6 +115,11 @@
       signOut();
     });
 
+    $(document).on('click','#members-table tbody tr',function() {
+      setCookie('memberId',$(this).data('key'));
+      window.location.pathname = '/member.html';
+    });
+
     checkAuth();
   });
   </script>

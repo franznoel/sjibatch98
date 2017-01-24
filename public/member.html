@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SJI '98 | Member</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      // TODO: Replace with your project's customized code snippet
+      var config = {
+        apiKey: "AIzaSyC-H_ws7WPkLU9ax6Ge7SKFgh1pil4vCD8",
+        authDomain: "sjibatch98.firebaseapp.com",
+        databaseURL: "https://sjibatch98.firebaseio.com",
+        storageBucket: "sjibatch98.appspot.com",
+        messagingSenderId: "33808654629",
+      };
+      firebase.initializeApp(config);
+    </script>
+    <style media="screen">
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="dashboard.html">SJI Batch '98</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="roster.html">Roster <span class="sr-only">(current)</span></a></li>
+            <li><a href="accounts.html">Accounts</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" id="username" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Username <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#facebook-profile" id="facebook-profile" target="_blank">Facebook Profile</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#logout" id="signOut">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2">
+          <img id="default-image" src="/assets/images/placeholder.png" class="img-thumbnail" style="width:100%" />
+          <hr/>
+          <form method="post" action="pay-homecoming.html">
+            <div class="input-group">
+              <span class="input-group-addon">&#8369;</span>
+              <input type="number" name="payment" class="form-control input-lg" value="12500" placeholder="Amount" />
+            </div>
+            <br/>
+            <input type="submit" class="btn btn-success btn-block" value="Pay Homecoming"/>
+          </form>
+        </div>
+        <div class="col-md-10">
+          <h3 id="fullName">Info <a href="/roster.html" class="btn btn-default">Go Back</a></h3>
+          <ul id="profile-tabs" class="nav nav-tabs">
+            <li class="active"><a href="#info-tab">Info</a></li>
+            <li><a href="#profession-tab">Profession</a></li>
+            <li><a href="#transactions-tab">Transactions</a></li>
+          </ul>
+          <br/>
+          <div class="tab-content">
+            <div id="info-tab" class="tab-pane active">
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label for="birthdate" class="col-md-3 control-label">Birthday</label>
+                      <div class="col-md-9">
+                        <p id="birthdate" class="form-control-static"></p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="email" class="col-md-3 control-label">Email</label>
+                      <div class="col-md-9">
+                        <p id="email" class="form-control-static"></p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="hometown" class="col-md-3 control-label">Hometown</label>
+                      <div class="col-md-9">
+                        <p id="hometown" class="form-control-static"></p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="location" class="col-md-3 control-label">Location</label>
+                      <div class="col-md-9">
+                        <p id="location" class="form-control-static"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <p><strong>About:</strong> Write something about this person, or write something about yourself.</p>
+                    <textarea class="form-control" id="about" name="about" rows="7" placeholder="About"></textarea>
+                </div>
+              </div>
+              <hr/>
+              <div class="row">
+                <div class="col-md-6">
+                  <h3>Education</h3>
+                  <div id="education">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="profession-tab" class="tab-pane">
+              <div id="professions">
+              </div>
+            </div>
+            <div id="transactions-tab" class="tab-pane">
+              <div id="transactions">
+                <h3>Transactions</h3>
+                <table id="transactions-table" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Description</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="3">There are no transactions.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="/assets/js/scripts.js"></script>
+  <script type="text/javascript" src="/assets/js/cookie.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    'use strict';
+
+    $('#profile-tabs a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    $('#signOut').click(function(e) {
+      e.preventDefault();
+      signOut();
+    });
+
+    checkAuth();
+  });
+  </script>
+</html>

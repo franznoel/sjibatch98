@@ -1,9 +1,9 @@
 {
-  "database": {
-    "rules": "database.rules.json"
-  },
   "hosting": {
     "public": "public",
+    "ignore": [
+      "firebase.json"
+    ],
     "cleanUrls": true,
     "trailingSlash": false
   }

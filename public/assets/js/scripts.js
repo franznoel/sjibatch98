@@ -19,6 +19,11 @@ var checkAuth = function() {
         case '/roster.html':
           displayRoster();
           break;
+        case '/member':
+        case '/member/':
+        case '/member.html':
+          displayMember();
+          break;
       }
 
     } else { // No user is signed in.
@@ -89,7 +94,7 @@ var getProfile = function(params,access_token) {
 }
 
 var getProfilePicture = function(id,token) {
-  var params = 'height=165&width=165&type=large&redirect=true`';
+  var params = 'height=500&width=500&type=large&redirect=true`';
   fetch('https://graph.facebook.com/v2.8/'+id+'/picture',{
       method: 'GET',
       headers: new Headers(),
@@ -138,7 +143,7 @@ var displayRoster = function() {
       var membersHtml = '';
       members.forEach(function(snapshot) {
         var member = snapshot.val();
-        membersHtml+= '<tr data-key="'+ member.id +'">';
+        membersHtml+= '<tr data-key="'+ member.id +'" style="cursor:pointer;">';
         membersHtml+= '<td>'+ member.name +'</td>';
         membersHtml+= '<td>'+ member.hometown.name +'</td>';
         membersHtml+= '<td>'+ member.location.name +'</td>';
@@ -148,5 +153,51 @@ var displayRoster = function() {
       })
       $('#members-table tbody').html(membersHtml);
     });
+}
 
+var displayMember = function() {
+  var memberId = getCookie('memberId');
+  var access_token = getCookie('token');
+  var membersQuery = firebase.database().ref("members/"+memberId);
+  membersQuery.once("value")
+    .then(function(snapshot) {
+      var user = snapshot.val();
+      console.log(user);
+      getProfilePicture(user.id,access_token);
+      $('#email').text(user.email);
+      $('#fullName').text(user.name);
+      $('#birthdate').text(user.birthday);
+      $('#hometown').text(user.hometown.name);
+      $('#location').text(user.location.name);
+      $('#about').text(user.about);
+      $('#username').html('Hello, '+ user.first_name +' <span class="caret"></span>');
+      $('#facebook-profile').attr('href','https://www.facebook.com/'+user.id)
+
+      var work_info = user.work
+      if (work_info) {
+        var workHtml = '';
+        for(var i=0;i<work_info.length;i++) {
+          var w = work_info[i];
+          workHtml+= '<h3>'+ w.employer.name +' <small>'+ w.location.name +'</small></h3>';
+          workHtml+= '<div>'+ w.position.name +' </div>';
+          workHtml+= '<p>Start Date: '+ w.start_date +'</p>'
+          workHtml+= '<hr/>';
+        }
+        $('#professions').html(workHtml);
+      }
+
+      var education_info = user.education
+      if (education_info) {
+        var eduHtml = '';
+        for(var i=0;i<education_info.length;i++) {
+          var e = education_info[i];
+          eduHtml+= '<div class="well well-sm">';
+          eduHtml+= '<strong>'+ e.school.name + '</strong><br/>';
+          eduHtml+= '<strong>Type:</strong> '+ e.type + '<br/>';
+          eduHtml+= '<strong>Year Graduated:</strong> '+ e.year.name;
+          eduHtml+= '</div>';
+        }
+        $('#education').html(eduHtml);
+      }
+    });
 }
