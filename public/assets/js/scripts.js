@@ -24,73 +24,17 @@ var checkAuth = function() {
         case '/member.html':
           displayMember();
           break;
+        case '/accounts':
+        case '/accounts/':
+        case '/accounts.html':
+          displayAccounts();
+          break;
       }
-
-    } else { // No user is signed in.
+    } else { // User not signed in.
       console.log('No user signed in.');
       window.location.href='/';
     }
   });
-}
-
-var displayProfile = function() {
-  var access_token = getCookie('token');
-    params = '?fields=id,name,photos,first_name,last_name,email,birthday,hometown,location,about,education,work';
-    params+= '&access_token=' + access_token;
-
-  getProfile(params,access_token);
-}
-
-var getProfile = function(params,access_token) {
-  fetch('https://graph.facebook.com/v2.8/me'+params,{
-      method: 'GET',
-      headers: new Headers(),
-      mode: 'cors',
-      cache: 'default',
-    }).then(function(response) {
-      return response.json();
-    }).then(function(json_response) {
-      var user = json_response;
-      getProfilePicture(user.id,access_token);
-      $('#email').text(user.email);
-      $('#fullName').text(user.name);
-      $('#birthdate').text(user.birthday);
-      $('#hometown').text(user.hometown.name);
-      $('#location').text(user.location.name);
-      $('#about').text(user.about);
-      $('#username').html('Hello, '+ user.first_name +' <span class="caret"></span>');
-      $('#facebook-profile').attr('href','https://www.facebook.com/'+user.id)
-
-      var work_info = user.work
-      if (work_info) {
-        var workHtml = '';
-        for(var i=0;i<work_info.length;i++) {
-          var w = work_info[i];
-          workHtml+= '<h3>'+ w.employer.name +' <small>'+ w.location.name +'</small></h3>';
-          workHtml+= '<div>'+ w.position.name +' </div>';
-          workHtml+= '<p>Start Date: '+ w.start_date +'</p>'
-          workHtml+= '<hr/>';
-        }
-        $('#professions').html(workHtml);
-      }
-
-      var education_info = user.education
-      if (education_info) {
-        var eduHtml = '';
-        for(var i=0;i<education_info.length;i++) {
-          var e = education_info[i];
-          eduHtml+= '<div class="well well-sm">';
-          eduHtml+= '<strong>'+ e.school.name + '</strong><br/>';
-          eduHtml+= '<strong>Type:</strong> '+ e.type + '<br/>';
-          eduHtml+= '<strong>Year Graduated:</strong> '+ e.year.name;
-          eduHtml+= '</div>';
-        }
-        $('#education').html(eduHtml);
-      }
-      updateUser(user);
-    }).catch(function(response) {
-      console.log('Error: ',response);
-    });  
 }
 
 var getProfilePicture = function(id,token) {
@@ -110,6 +54,57 @@ var getProfilePicture = function(id,token) {
     });
 }
 
+var displayUserContent = function(user) {
+  $('#email').text(user.email);
+  $('#fullName').text(user.name);
+  $('#birthdate').text(user.birthday);
+  $('#hometown').text(user.hometown.name);
+  $('#location').text(user.location.name);
+  $('#about').text(user.about);
+}
+
+var initNavBar = function() {
+  var userId = getCookie('userId');
+  var userFirstName = getCookie('userFirstName');
+  $('#username').html('Hello, '+ userFirstName +' <span class="caret"></span>');
+  $('#facebook-profile').attr('href','https://www.facebook.com/'+userId);
+}
+
+var displayWorkInfo = function(work_info) {
+  if (work_info) {
+    var workHtml = '';
+    for(var i=0;i<work_info.length;i++) {
+      var w = work_info[i];
+      workHtml+= '<h3>'+ w.employer.name +' <small>'+ w.location.name +'</small></h3>';
+      workHtml+= '<div>'+ w.position.name +' </div>';
+      workHtml+= '<p>Start Date: '+ w.start_date +'</p>'
+      workHtml+= '<hr/>';
+    }
+    $('#professions').html(workHtml);
+  }  
+}
+
+var displayEducationInfo = function(education_info) {
+  if (education_info) {
+    var eduHtml = '';
+    for(var i=0;i<education_info.length;i++) {
+      var e = education_info[i];
+      eduHtml+= '<div class="well well-sm">';
+      eduHtml+= '<strong>'+ e.school.name + '</strong><br/>';
+      eduHtml+= '<strong>Type:</strong> '+ e.type + '<br/>';
+      eduHtml+= '<strong>Year Graduated:</strong> '+ e.year.name;
+      eduHtml+= '</div>';
+    }
+    $('#education').html(eduHtml);
+  }
+}
+
+var setUserCookie = function(user) {
+  setCookie('userId',user.id);
+  setCookie('userFirstName',user.first_name);
+}
+
+// CRUD User
 var updateUser = function(user) {
   var member = user;
   var memberKey = firebase.database().ref().child('members').push().key;
@@ -119,25 +114,42 @@ var updateUser = function(user) {
   return firebase.database().ref().update(memberUpdates);
 }
 
-var signOut = function() {
-  firebase.auth().signOut().then(function() {
-    // Sign-out successful.
-    remove
-    window.location.href='/logout.html';
-  }, function(error) {
-    // An error happened.
-    console.log('Error:',error);
-  });
+// Profile Page
+var displayProfile = function() {
+  var access_token = getCookie('token');
+    params = '?fields=id,name,photos,first_name,last_name,email,birthday,hometown,location,about,education,work,picture';
+    params+= '&access_token=' + access_token;
+
+  initNavBar();
+
+  fetch('https://graph.facebook.com/v2.8/me'+params,{
+      method: 'GET',
+      headers: new Headers(),
+      mode: 'cors',
+      cache: 'default',
+    }).then(function(response) {
+      return response.json();
+    }).then(function(json_response) {
+      var user = json_response;
+      console.log(json_response);
+      getProfilePicture(user.id,access_token);
+      displayUserContent(user);
+      displayWorkInfo(user.work);
+      displayEducationInfo(user.education);
+
+      setUserCookie(user);
+
+      updateUser(user);
+    }).catch(function(response) {
+      console.log('Error: ',response);
+    });    
 }
 
-var facebookSignOut = function() {
-  FirebaseAuth.getInstance().signOut();    
-}
-
-// Roster
+// Roster Page
 var displayRoster = function() {
-  var membersQuery = firebase.database().ref("members");
+  initNavBar();
 
+  var membersQuery = firebase.database().ref("members");
   membersQuery.once("value")
     .then(function(members) {
       var membersHtml = '';
@@ -150,54 +162,37 @@ var displayRoster = function() {
         membersHtml+= '<td>'+ member.birthday +'</td>';
         membersHtml+= '<td>'+ member.work[0].position.name +'</td>';
         membersHtml+= '</tr>';
-      })
+      });
       $('#members-table tbody').html(membersHtml);
     });
 }
 
+// Member Page
 var displayMember = function() {
+  initNavBar();
+
   var memberId = getCookie('memberId');
   var access_token = getCookie('token');
   var membersQuery = firebase.database().ref("members/"+memberId);
   membersQuery.once("value")
     .then(function(snapshot) {
-      var user = snapshot.val();
-      console.log(user);
-      getProfilePicture(user.id,access_token);
-      $('#email').text(user.email);
-      $('#fullName').text(user.name);
-      $('#birthdate').text(user.birthday);
-      $('#hometown').text(user.hometown.name);
-      $('#location').text(user.location.name);
-      $('#about').text(user.about);
-      $('#username').html('Hello, '+ user.first_name +' <span class="caret"></span>');
-      $('#facebook-profile').attr('href','https://www.facebook.com/'+user.id)
-
-      var work_info = user.work
-      if (work_info) {
-        var workHtml = '';
-        for(var i=0;i<work_info.length;i++) {
-          var w = work_info[i];
-          workHtml+= '<h3>'+ w.employer.name +' <small>'+ w.location.name +'</small></h3>';
-          workHtml+= '<div>'+ w.position.name +' </div>';
-          workHtml+= '<p>Start Date: '+ w.start_date +'</p>'
-          workHtml+= '<hr/>';
-        }
-        $('#professions').html(workHtml);
-      }
-
-      var education_info = user.education
-      if (education_info) {
-        var eduHtml = '';
-        for(var i=0;i<education_info.length;i++) {
-          var e = education_info[i];
-          eduHtml+= '<div class="well well-sm">';
-          eduHtml+= '<strong>'+ e.school.name + '</strong><br/>';
-          eduHtml+= '<strong>Type:</strong> '+ e.type + '<br/>';
-          eduHtml+= '<strong>Year Graduated:</strong> '+ e.year.name;
-          eduHtml+= '</div>';
-        }
-        $('#education').html(eduHtml);
-      }
+      var member = snapshot.val();
+      console.log(member);
+      getProfilePicture(member.id,access_token);
+      displayUserContent(member);
+      displayWorkInfo(member.work);
+      displayEducationInfo(member.education);
     });
+}
+
+// Account Page
+var displayAccounts = function() {
+  initNavBar();
+}
+
+// Sign In or Sign Out
+var facebookSignOut = function() {
+  setCookie('token','');
+  setCookie('memberId','');
+  FirebaseAuth.getInstance().signOut();    
 }
