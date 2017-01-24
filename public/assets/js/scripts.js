@@ -190,9 +190,11 @@ var displayAccounts = function() {
   initNavBar();
 }
 
-// Sign In or Sign Out
-var facebookSignOut = function() {
-  setCookie('token','');
-  setCookie('memberId','');
-  FirebaseAuth.getInstance().signOut();    
+// Sign Out
+var signOut = function() {
+  firebase.auth().signOut().then(function() {
+    console.log('Successfully Signed out!')
+  },function(error) {
+    console.log('Error:', error);
+  });
 }
