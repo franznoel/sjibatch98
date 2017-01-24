@@ -118,31 +118,49 @@ var updateUser = function(user) {
 var displayProfile = function() {
   var access_token = getCookie('token');
     params = '?fields=id,name,photos,first_name,last_name,email,birthday,hometown,location,about,education,work,picture';
-    params+= '&access_token=' + access_token;
+    params+= '&access_token=' + access_token,
+    userId = getCookie('userId');
+
 
   initNavBar();
 
-  fetch('https://graph.facebook.com/v2.8/me'+params,{
-      method: 'GET',
-      headers: new Headers(),
-      mode: 'cors',
-      cache: 'default',
-    }).then(function(response) {
-      return response.json();
-    }).then(function(json_response) {
-      var user = json_response;
-      console.log(json_response);
-      getProfilePicture(user.id,access_token);
-      displayUserContent(user);
-      displayWorkInfo(user.work);
-      displayEducationInfo(user.education);
+  if (userId) {
+    var userId = getCookie('userId');
+    var access_token = getCookie('token');
+    var usersQuery = firebase.database().ref("members/"+userId);
+    usersQuery.once("value")
+      .then(function(snapshot) {
+        var user = snapshot.val();
+        // console.log(user);
+        getProfilePicture(user.id,access_token);
+        displayUserContent(user);
+        displayWorkInfo(user.work);
+        displayEducationInfo(user.education);
+      });
+  } else {
+    fetch('https://graph.facebook.com/v2.8/me'+params,{
+        method: 'GET',
+        headers: new Headers(),
+        mode: 'cors',
+        cache: 'default',
+      }).then(function(response) {
+        return response.json();
+      }).then(function(json_response) {
+        var user = json_response;
+        // console.log(json_response);
+        getProfilePicture(user.id,access_token);
+        displayUserContent(user);
+        displayWorkInfo(user.work);
+        displayEducationInfo(user.education);
 
-      setUserCookie(user);
+        setUserCookie(user);
 
-      updateUser(user);
-    }).catch(function(response) {
-      console.log('Error: ',response);
-    });    
+        updateUser(user);
+      }).catch(function(response) {
+        console.log('Error: ',response);
+      });
+  }
+
 }
 
 // Roster Page
