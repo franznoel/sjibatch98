@@ -104,6 +104,28 @@ var setUserCookie = function(user) {
   setCookie('userFirstName',user.first_name);
 }
 
+var isAlumni = function(education = null) {
+  if (education!=null) {
+    for(var i=0;i<education.length;i++) {
+      var edu = education[i];
+      if (edu.type=='High School' && edu.year.name=='1998' && edu.school.name=="St. John's Institute") {
+        localStorage.setItem('isAlumni','true');
+        return true;
+      }
+    }
+  } else { //If no education
+    if (localStorage.getItem('isAlumni')=='true') {
+      // console.log('Yes, this person is an alumni!');
+      return true;
+    }
+  }
+
+  localStorage.setItem('isAlumni','false');
+  window.location.href = '/404.html';
+  return false;
+}
+
+
 // CRUD User
 var updateUser = function(user) {
   var member = user;
@@ -113,6 +135,7 @@ var updateUser = function(user) {
 
   return firebase.database().ref().update(memberUpdates);
 }
+
 
 // Profile Page
 var displayProfile = function() {
@@ -131,6 +154,7 @@ var displayProfile = function() {
     usersQuery.once("value")
       .then(function(snapshot) {
         var user = snapshot.val();
+        isAlumni(user.education);
         // console.log(user);
         getProfilePicture(user.id,access_token);
         displayUserContent(user);
@@ -147,6 +171,7 @@ var displayProfile = function() {
         return response.json();
       }).then(function(json_response) {
         var user = json_response;
+        isAlumni(user.education);
         // console.log(json_response);
         getProfilePicture(user.id,access_token);
         displayUserContent(user);
@@ -166,6 +191,7 @@ var displayProfile = function() {
 
 // Roster Page
 var displayRoster = function() {
+  isAlumni();
   initNavBar();
 
   var membersQuery = firebase.database().ref("members");
@@ -189,6 +215,7 @@ var displayRoster = function() {
 
 // Member Page
 var displayMember = function() {
+  isAlumni();
   initNavBar();
 
   var memberId = getCookie('memberId');
@@ -207,6 +234,7 @@ var displayMember = function() {
 
 // Account Page
 var displayAccounts = function() {
+  isAlumni();
   initNavBar();
 }
 
