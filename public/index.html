@@ -59,7 +59,7 @@
   <script type="text/javascript" src="/assets/js/cookie.js"></script>
   <script type="text/javascript">
   var provider = new firebase.auth.FacebookAuthProvider();
-  provider.addScope('user_birthday,email,user_education_history,user_work_history,user_about_me,user_hometown,user_location,user_photos');
+  provider.addScope('user_birthday,email,user_education_history,user_work_history,user_about_me,user_hometown,user_location');
 
   var facebookLogin = function() {
     firebase.auth().signInWithPopup(provider).then(function(result) {
