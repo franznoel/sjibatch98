@@ -35,7 +35,7 @@ var checkAuth = function() {
       window.location.href='/';
     }
   });
-}
+};
 
 var getProfilePicture = function(id,token) {
   var params = 'height=500&width=500&type=large&redirect=true`';
@@ -52,7 +52,7 @@ var getProfilePicture = function(id,token) {
     }).catch(function(response) {
       console.log('Error: ',response);
     });
-}
+};
 
 var displayUserContent = function(user) {
   $('#email').text(user.email);
@@ -61,14 +61,14 @@ var displayUserContent = function(user) {
   $('#hometown').text(user.hometown.name);
   $('#location').text(user.location.name);
   $('#about').text(user.about);
-}
+};
 
 var initNavBar = function() {
   var userId = getCookie('userId');
   var userFirstName = getCookie('userFirstName');
   $('#username').html('Hello, '+ userFirstName +' <span class="caret"></span>');
   $('#facebook-profile').attr('href','https://www.facebook.com/'+userId);
-}
+};
 
 var displayWorkInfo = function(work_info) {
   if (work_info) {
@@ -82,7 +82,7 @@ var displayWorkInfo = function(work_info) {
     }
     $('#professions').html(workHtml);
   }  
-}
+};
 
 var displayEducationInfo = function(education_info) {
   if (education_info) {
@@ -97,18 +97,21 @@ var displayEducationInfo = function(education_info) {
     }
     $('#education').html(eduHtml);
   }
-}
+};
 
 var setUserCookie = function(user) {
   setCookie('userId',user.id);
   setCookie('userFirstName',user.first_name);
-}
+};
 
-var isAlumni = function(education = null) {
+var isAlumni = function(education) {
   if (education!=null) {
     for(var i=0;i<education.length;i++) {
       var edu = education[i];
-      if (edu.type=='High School' && edu.year.name=='1998' && edu.school.name=="St. John's Institute") {
+
+      var schools = [111114218932242,108438665853367,108194572546970];
+
+      if (edu.type=='High School' && edu.year.name=='1998' && $.inArray(edu.school.id,schools)) {
         localStorage.setItem('isAlumni','true');
         return true;
       }
@@ -123,7 +126,7 @@ var isAlumni = function(education = null) {
   localStorage.setItem('isAlumni','false');
   window.location.href = '/404.html';
   return false;
-}
+};
 
 
 // CRUD User
@@ -134,7 +137,7 @@ var updateUser = function(user) {
   memberUpdates['/members/'+user.id] = member;
 
   return firebase.database().ref().update(memberUpdates);
-}
+};
 
 
 // Profile Page
@@ -187,7 +190,7 @@ var displayProfile = function() {
       });
   }
 
-}
+};
 
 // Roster Page
 var displayRoster = function() {
@@ -211,7 +214,7 @@ var displayRoster = function() {
       });
       $('#members-table tbody').html(membersHtml);
     });
-}
+};
 
 // Member Page
 var displayMember = function() {
@@ -230,13 +233,13 @@ var displayMember = function() {
       displayWorkInfo(member.work);
       displayEducationInfo(member.education);
     });
-}
+};
 
 // Account Page
 var displayAccounts = function() {
   isAlumni();
   initNavBar();
-}
+};
 
 // Sign Out
 var signOut = function() {
@@ -245,4 +248,4 @@ var signOut = function() {
   },function(error) {
     console.log('Error:', error);
   });
-}
+};
