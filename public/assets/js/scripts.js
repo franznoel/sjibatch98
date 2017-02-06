@@ -214,6 +214,11 @@ var displayRoster = function() {
       });
       $('#members-table tbody').html(membersHtml);
     });
+
+  membersQuery.once("value").then(function(snapshot) {
+    var membersCount = snapshot.numChildren();
+    $('#membersCount').html(membersCount);
+  });
 };
 
 // Member Page
