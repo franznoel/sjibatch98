@@ -128,6 +128,11 @@ var isAlumni = function(education) {
   return false;
 };
 
+// CRUD Payments
+var setPayment = function() {
+  
+};
+
 
 // CRUD User
 var updateUser = function(user) {

@@ -159,9 +159,11 @@
               <h4 class="modal-title">Pay Homecoming<h4>
             </div>
             <div class="modal-body">
+              <input type="hidden" id="paidBy" name="paidBy" value="" />
+              <input type="hidden" id="paidFor" name="paidFor" value="" />
               <div class="input-group">
                 <span class="input-group-addon">&#8369;</span>
-                <input type="number" name="payment" class="form-control input-lg" value="12500" placeholder="Amount" />
+                <input type="number" id="payment" name="payment" class="form-control input-lg" value="12500" placeholder="Amount" />
               </div>
             </div>
             <div class="modal-footer">
@@ -189,6 +191,16 @@
     $('#signOut').click(function(e) {
       e.preventDefault();
       signOut();
+    });
+
+    $('#payHomecomingForm').submit(function(e) {
+      e.preventDefault();
+      var paidBy = $('#paidBy').val(),
+        paidFor = $('#paidFor').val(),
+        payment = $('#payment').val();
+
+      console.log(paidBy,paidFor,payment);
+      console.log('submitting modal');
     });
 
     checkAuth();
