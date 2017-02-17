@@ -13,7 +13,7 @@
       // TODO: Replace with your project's customized code snippet
       var config = {
         apiKey: "AIzaSyC-H_ws7WPkLU9ax6Ge7SKFgh1pil4vCD8",
-        authDomain: "sjibatch98.firebaseapp.com",
+        authDomain: "sji.asteriainteractive.com",
         databaseURL: "https://sjibatch98.firebaseio.com",
         storageBucket: "sjibatch98.appspot.com",
         messagingSenderId: "33808654629",
@@ -198,6 +198,12 @@
       var paidBy = $('#paidBy').val(),
         paidFor = $('#paidFor').val(),
         payment = $('#payment').val();
+
+      firebase.database().ref('payments/' + userId).set({
+        date: new Date().toDateString(),
+        paidBy: paidBy,
+        paidFor: paidFor
+      });
 
       console.log(paidBy,paidFor,payment);
       console.log('submitting modal');

@@ -172,7 +172,7 @@ var displayProfile = function() {
       .then(function(snapshot) {
         var user = snapshot.val();
         isAlumni(user.education);
-        // console.log(user);
+        console.log(user);
         getProfilePicture(user.id,access_token);
         displayUserContent(user);
         displayWorkInfo(user.work);
