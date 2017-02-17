@@ -129,8 +129,17 @@ var isAlumni = function(education) {
 };
 
 // CRUD Payments
-var setPayment = function() {
-  
+var setPayment = function(page) {
+  var memberId = getCookie('memberId'),
+    userId = getCookie('userId'),
+    payment = $('#payment').val();
+
+    $('#paidBy').val(userId);
+    if (page=='profile') {
+      $('#paidFor').val(userId);
+    } else {
+      $('#paidFor').val(memberId);
+    }
 };
 
 
@@ -156,7 +165,7 @@ var displayProfile = function() {
   initNavBar();
 
   if (userId) {
-    var userId = getCookie('userId');
+    var userId = getCookie('userId'); 
     var access_token = getCookie('token');
     var usersQuery = firebase.database().ref("members/"+userId);
     usersQuery.once("value")
@@ -168,6 +177,7 @@ var displayProfile = function() {
         displayUserContent(user);
         displayWorkInfo(user.work);
         displayEducationInfo(user.education);
+        setPayment('profile');
       });
   } else {
     fetch('https://graph.facebook.com/v2.8/me'+params,{
@@ -185,6 +195,7 @@ var displayProfile = function() {
         displayUserContent(user);
         displayWorkInfo(user.work);
         displayEducationInfo(user.education);
+        setPayment('profile');
 
         setUserCookie(user);
 
@@ -242,6 +253,7 @@ var displayMember = function() {
       displayUserContent(member);
       displayWorkInfo(member.work);
       displayEducationInfo(member.education);
+      setPayment('profile');
     });
 };
 
