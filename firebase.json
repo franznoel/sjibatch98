@@ -6,9 +6,18 @@
     ],
     "cleanUrls": true,
     "trailingSlash": false,
-    "rewrites": [{
-        "source": "member/**",
-        "destination": "/member.html"
-    }]
+    "rewrites": [
+        {
+            "source": "/member/**",
+            "destination": "/member/index.html"
+        }
+    ],
+    "redirects": [
+        {
+            "source": "/member",
+            "destination": "/members",
+            "type": 301
+        }
+    ]
   }
 }

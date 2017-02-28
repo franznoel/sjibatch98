@@ -106,28 +106,25 @@ var checkAuth = function() {
 
       var path = window.location.pathname;
 
-      switch(path) {
-        case '/profile':
-        case '/profile/':
-        case '/profile.html':
-          page.profile();
-          break;
-        case '/roster':
-        case '/roster/':
-        case '/roster.html':
-          page.roster();
-          break;
-        case '/member':
-        case '/member/':
-        case '/member.html':
-          page.member();
-          break;
-        case '/accounts':
-        case '/accounts/':
-        case '/accounts.html':
-          page.accounts();
-          break;
+      var isProfilePage = /^(\/profile)+(\/|\.html)*$/.test(path),
+        isMemberPage = /^(\/member)+(\/)+[A-Za-z0-9_-]+$/.test(path),
+        isMembersPage = /^(\/members)+(\/|\.html)*$/.test(path),
+        isAccountsPage = /^(\/accounts)+(\/|\.html)*$/.test(path);
+
+      if (isProfilePage) {
+        console.log('Profile Page');
+        page.profile();
+      } else if (isAccountsPage) {
+        console.log('Accounts Page');
+        page.accounts();
+      } else if (isMembersPage) {
+        console.log('Members Page');
+        page.roster();
+      } else if (isMemberPage) {
+        console.log('Member Page');
+        page.members();
       }
+
     } else { // User not signed in.
       console.log('No user signed in.');
       window.location.href='/';
@@ -136,7 +133,7 @@ var checkAuth = function() {
 };
 
 var payment = {
-  set() {
+  set(page) {
     var memberId = getCookie('memberId'),
       userId = getCookie('userId'),
       payment = $('#payment').val();
@@ -186,7 +183,7 @@ var page = {
           return response.json();
         }).then(function(json_response) {
           var userInfo = json_response;
-          isAlumni(userInfo.education);
+          user.isAlumni(userInfo.education);
           // console.log(json_response);
           user.getPicture(userInfo.id,access_token);
           user.displayInfo(userInfo);
@@ -230,11 +227,12 @@ var page = {
       $('#membersCount').html(membersCount);
     });
   },
-  member() {
+  members() {
     user.isAlumni();
     this.getNavBar();
-
-    var memberId = getCookie('memberId');
+    var path = window.location.pathname;
+    var memberId = path.split('/')[2];
+    // var memberId = getCookie('memberId');
     var access_token = getCookie('token');
     var membersQuery = firebase.database().ref("members/"+memberId);
     membersQuery.once("value")
