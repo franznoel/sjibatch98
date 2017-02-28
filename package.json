@@ -1,0 +1,24 @@
+{
+  "name": "sjibatch98",
+  "version": "1.0.0",
+  "description": "SJI Batch 98",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fritzdenim/sjibatch98.git"
+  },
+  "keywords": [
+    "sji",
+    "batch",
+    "98"
+  ],
+  "author": "Franz Noel Tanglao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fritzdenim/sjibatch98/issues"
+  },
+  "homepage": "https://github.com/fritzdenim/sjibatch98#readme"
+}

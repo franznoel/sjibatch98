@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/libs/jquery-load-template/dist/jquery-loadTemplate.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
     <script>
       // Initialize Firebase
@@ -33,19 +34,6 @@
             <div class="panel-body">
               <div id="status-message" style="display:none;">
               </div>
-              <!--
-              <form id="loginForm" method="post" action="roster.html">
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="text" id="email" class="form-control" name="email" value="" placeholder="Email"/>
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" id="password" class="form-control" name="password" value="" placeholder="Password"/>
-                </div>
-                <input type="submit" class="btn btn-primary" name="submit" value="Login" />
-              </form>
-              -->
               <div style="text-align:center;">
                 <img src="/assets/images/sji-logo.jpg" class="img-thumbnail"/>
                 <hr/>
@@ -84,18 +72,6 @@
     });
   };
 
-  // var emailLogin = function() {
-  //   var email = $('#email').val(),
-  //       password = $('#password').val();
-
-  //   // console.log(email,password);
-  //   firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-  //     var errorCode = error.code;
-  //     var errorMessage = error.message;
-  //     // console.log(errorCode,errorMessage);
-  //   });
-  // };
-
   var checkAuth = function() {
     firebase.auth().onAuthStateChanged(function(user) {
       var token = getCookie('token');
@@ -110,12 +86,6 @@
   $(document).ready(function() {
     'use strict';
 
-    // $('#loginForm').submit(function(e) {
-    //   e.preventDefault();
-    //   console.log('Email login...');
-    //   emailLogin();
-    // });
-
     $('#facebookLogin').click(function(e) {
       e.preventDefault();
       facebookLogin();
@@ -124,4 +94,5 @@
     checkAuth();
   });
   </script>
+
 </html>

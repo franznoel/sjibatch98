@@ -1,0 +1,25 @@
+{
+  "name": "sjibatch98",
+  "homepage": "https://github.com/fritzdenim/sjibatch98",
+  "authors": [
+    "Franz Noel Tanglao <franz@asteriainteractive.com>"
+  ],
+  "description": "SJI Batch 98",
+  "main": "",
+  "keywords": [
+    "sji",
+    "batch",
+    "98"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-load-template": "^1.5.10"
+  }
+}
