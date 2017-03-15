@@ -6,18 +6,22 @@
     ],
     "cleanUrls": true,
     "trailingSlash": false,
-    "rewrites": [
-        {
-            "source": "/member/**",
-            "destination": "/member/index.html"
-        }
-    ],
-    "redirects": [
-        {
-            "source": "/member",
-            "destination": "/members",
-            "type": 301
-        }
-    ]
+    "rewrites": [{
+        "source": "(.*)?",
+        "destination": "/index.html"
+    }]
+    // "rewrites": [
+    //     {
+    //         "source": "/member/**",
+    //         "destination": "/member/index.html"
+    //     }
+    // ],
+    // "redirects": [
+    //     {
+    //         "source": "/member",
+    //         "destination": "/members",
+    //         "type": 301
+    //     }
+    // ]
   }
 }

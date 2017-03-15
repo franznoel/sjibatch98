@@ -19,7 +19,5 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "jquery-load-template": "^1.5.10"
-  }
+  "dependencies": {}
 }
