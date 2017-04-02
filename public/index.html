@@ -24,7 +24,7 @@
   </body>
   <script type="text/javascript" src="/assets/js/cookie.js"></script>
   <script>
-  var renderTemplate = function(type,templateName,data={}) {
+  var renderTemplate = function(type,templateName,data) {
     var templateHtml = templateName+'.html';
     fetch('templates/'+templateHtml).then(function(response){
       var template = response.text().then(function(template) {
@@ -42,16 +42,6 @@
     }).catch(function(response) {
       console.log(response);
     });
-
-    // $.get(templateHtml, function(template) {
-    //   var rendered = Mustache.render(template,data);
-    //   if (type=='page') {
-    //     $('body').html(rendered);
-    //   } else if (type=='status') {
-    //     $('#status-message').html(rendered);
-    //   }
-    //   history.pushState(null,null,templateName);
-    // });
   }
   </script>
   <!--<script src="/assets/js/scripts.js"></script>-->
