@@ -1,0 +1,35 @@
+<!-- Container #1 (see wireframe) -->
+<md-content ng-cloak>
+  <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+    <h3 class="md-navbar-title" style="margin:10px 5px;">SJI Batch '98</h3>
+    <md-nav-item md-nav-click="goto('members')" name="members">Members</md-nav-item>
+    <md-nav-item md-nav-click="goto('logout')" name="logout">Logout</md-nav-item>
+  </md-nav-bar>
+</md-content>
+
+<md-content class="md-padding" layout-md="row" layout="row" style="padding:0 10px 0 10px;">
+  <div flex="33">
+    <h4>Add Members</h4>
+    <form method="post" action="/members/add">
+      <md-input-container class="md-block">
+        <label>Name</label>
+        <input ng-model="user.name">
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Email</label>
+        <input ng-model="user.email">
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Birthday</label>
+        <input ng-model="user.birthday">
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Balance</label>
+        <input ng-model="user.balance">
+      </md-input-container>
+      <md-button class="md-raised md-primary" type="submit">Login</md-button>
+      <md-button class="md-raised md-default" ng-href="/members" type="submit">Cancel</md-button>
+    </form>
+  </div>
+</md-content>
+

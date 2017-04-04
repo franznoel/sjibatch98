@@ -9,12 +9,12 @@
 
 <md-content style="padding:0 10px 0 10px;">
     <section>
-        <md-button class="md-raised md-primary" style="margin:10px 0;">Add Member</md-button>
+        <md-button class="md-raised md-primary" style="margin:10px 0;" ng-href="/members/add">Add Member</md-button>
     </section>
     <section layout="row" layout-md="column" layout-align="left center" layout-wrap>
       <md-input-container flex="25">
         <label>Member Search</label>
-        <input required type="text" name="memberSearch" ng-model="member.search" maxlength="100" />
+        <input type="text" name="memberSearch" ng-model="member.search" maxlength="100" />
       </md-input-container>
     </section>
     <table id="members-table" class="table table-hover table-bordered table-condensed">
@@ -26,12 +26,13 @@
           <th>Payment Due</th>
           <th>Paid Amount</th>
           <th>Balance</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colspan="7">There are no members.</td>
+          <td colspan="8">There are no members.</td>
         </tr>
       </tbody>
     </table>
