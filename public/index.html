@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="sji98">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SJI Batch 98 | Login</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    -->
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
@@ -37,8 +39,16 @@
         'ngRoute',
         'ngMaterial'
       ]);
+
+    angular.module('sji98').run(function (){
+      console.log("Running the 'starter-app-bootstrap' module for ES6 Material-Start Tutorial");
+    });
+
     angular.module('sji98')
-      .config(function($locationProvider,$routeProvider) {
+      .config(function($locationProvider,$routeProvider,$mdThemingProvider) {
+          $mdThemingProvider.theme('default')
+            .primaryPalette('blue');
+
           $locationProvider.html5Mode(true);
 
           $routeProvider
@@ -48,6 +58,9 @@
             .when('/members',{
               templateUrl: 'templates/members.html'
             })
+            .when('/members/add',{
+              templateUrl: 'templates/members-add.html'
+            })
             .when('/accounts',{
               templateUrl: 'templates/accounts.html'
             })
@@ -56,9 +69,10 @@
             });
         });
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css" />
     <base href="/">
   </head>
-  <body ng-app="sji98">
+  <body>
     <ng-view></ng-view>
   </body>
 </html>
