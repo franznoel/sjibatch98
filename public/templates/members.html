@@ -1,60 +1,39 @@
-<nav class="navbar navbar-default navbar-static-top">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">SJI Batch '98</a>
-    </div>
+<!-- Container #1 (see wireframe) -->
+<md-content ng-cloak>
+  <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+    <h3 class="md-navbar-title" style="margin:10px 5px;">SJI Batch '98</h3>
+    <md-nav-item md-nav-click="goto('members')" name="members">Members</md-nav-item>
+    <md-nav-item md-nav-click="goto('logout')" name="logout">Logout</md-nav-item>
+  </md-nav-bar>
+</md-content>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="/members">Members <span class="sr-only">(current)</span></a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" id="username" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Username <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#facebook-profile" id="facebook-profile" target="_blank">Facebook Profile</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#logout" id="signOut">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="form-group">
-        <b class="pull-right">Members <span id="membersCount" class="badge"></span></b>
-        <label for="search">Search</label>
-        <input type="text" id="search" class="form-control" name="search" value="" placeholder="Search" />
-      </div>
-    </div>
-  </div>
-  <table id="members-table" class="table table-hover table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Birthday</th>
-        <th>Payment Due</th>
-        <th>Paid Amount</th>
-        <th>Balance</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="7">There are no members.</td>
-      </tr>
-    </tbody>
-  </table>
-</div><!-- #container-fluid -->
+<md-content style="padding:0 10px 0 10px;">
+    <section>
+        <md-button class="md-raised md-primary" style="margin:10px 0;">Add Member</md-button>
+    </section>
+    <section layout="row" layout-md="column" layout-align="left center" layout-wrap>
+      <md-input-container flex="25">
+        <label>Member Search</label>
+        <input required type="text" name="memberSearch" ng-model="member.search" maxlength="100" />
+      </md-input-container>
+    </section>
+    <table id="members-table" class="table table-hover table-bordered table-condensed">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Birthday</th>
+          <th>Payment Due</th>
+          <th>Paid Amount</th>
+          <th>Balance</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7">There are no members.</td>
+        </tr>
+      </tbody>
+    </table>
+</md-content>
+
