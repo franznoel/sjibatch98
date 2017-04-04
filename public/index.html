@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SJI Batch 98 | Login</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
     <script>
       var config = {
         apiKey: "AIzaSyC-H_ws7WPkLU9ax6Ge7SKFgh1pil4vCD8",
@@ -22,102 +21,4 @@
   </head>
   <body>
   </body>
-  <script type="text/javascript" src="/assets/js/cookie.js"></script>
-  <script>
-  var renderTemplate = function(type,templateName,data) {
-    var templateHtml = templateName+'.html';
-    fetch('templates/'+templateHtml).then(function(response){
-      var template = response.text().then(function(template) {
-        // console.log(data);
-        var rendered = Mustache.render(template,data);
-
-        if (type=='page') {
-          document.querySelector('body').innerHTML = rendered;
-        } else if (type=='status') {
-          document.getElementById('status-message').innerHTML = rendered;
-        }
-
-        history.pushState(null,null,templateName);
-      });
-    }).catch(function(response) {
-      console.log(response);
-    });
-  }
-  </script>
-  <!--<script src="/assets/js/scripts.js"></script>-->
-  <script type="text/javascript">
-  (function() {
-    'use strict';
-    var app = {
-      router: function(path) {
-        var isProfilePage = /^(\/profile){1}(\/|\.html){1}$/.test(path),
-          isMemberPage = /^(\/member){1}(\/){1}[A-Za-z0-9_-]+$/.test(path),
-          isMembersPage = /^(\/members){1}(\/|\.html){1}$/.test(path),
-          isAccountsPage = /^(\/accounts){1}(\/|\.html){1}$/.test(path);
-
-        if (isProfilePage) {
-          renderTemplate('page','profile');
-          console.log('Profile Page');
-          // page.profile();
-        } else if (isAccountsPage) {
-          renderTemplate('page','accounts');
-          console.log('Accounts Page');
-          // page.accounts();
-        } else if (isMembersPage) {
-          renderTemplate('page','members');
-          console.log('Members Page');
-          // page.roster();
-        } else if (isMemberPage) {
-          renderTemplate('page','member');
-          console.log('Member Page');
-          // page.members();
-        }        
-      },
-      user: {
-        model: null,
-        controller: {
-          login: function() {
-            var facebookProvider = new firebase.auth.FacebookAuthProvider();
-            facebookProvider.addScope('public_profile,user_photos,user_birthday,email,user_education_history,user_work_history,user_about_me,user_hometown,user_location');
-            firebase.auth().signInWithPopup(facebookProvider).then(function(result) {
-              // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-              var token = result.credential.accessToken;
-              var user = result.user;
-              console.log('Successfully logged in with Facebook.');
-            }).catch(function(error) {
-              console.log(firebase);
-              console.log('Error: ',error);
-              renderTemplate('status','status-message',{error:error});
-            });
-          },
-          isLoggedIn: function() {
-            console.log('Check if user is logged in.')
-            firebase.auth().onAuthStateChanged(function(user) {
-              if (user) { // User is signed in.
-                var user = JSON.parse(JSON.stringify(user)),
-                  accessToken = user.stsTokenManager.accessToken;
-
-                renderTemplate('page','profile');
-              } else { // No user is signed in.
-                renderTemplate('page','login');
-                console.log('No user signed in.');
-              }
-            });
-          }
-        }
-      }
-    };
-
-    console.log(firebase.app().name);
-    app.user.controller.isLoggedIn();
-
-    $(document).on('click','#facebookLogin',function(e) {
-      e.preventDefault();
-      app.user.controller.login();
-    });
-
-  })();
-  </script>
-
-
 </html>
