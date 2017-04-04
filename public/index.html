@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SJI Batch 98 | Login</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
     <script>
       var config = {
         apiKey: "AIzaSyC-H_ws7WPkLU9ax6Ge7SKFgh1pil4vCD8",
@@ -18,7 +20,35 @@
       };
       firebase.initializeApp(config);
     </script>
+
+    <!-- AngularJs -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.min.js"></script>
+    <script>
+    'use strict';
+    angular.module('sji98',[
+        'ngRoute',
+      ]);
+    angular.module('sji98')
+      .config(function($locationProvider,$routeProvider) {
+          $locationProvider.html5Mode(true);
+
+          $routeProvider
+            .when('/',{
+              templateUrl: 'templates/login.html'
+            })
+            .when('/accounts',{
+              templateUrl: 'templates/accounts.html'
+            })
+            .otherwise('/404',{
+              templateUrl: 'templates/404.html'
+            });
+        });
+    </script>
+    <base href="/">
   </head>
-  <body>
+  <body ng-app="sji98">
+    <ng-view></ng-view>
   </body>
 </html>
