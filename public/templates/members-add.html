@@ -7,10 +7,10 @@
   </md-nav-bar>
 </md-content>
 
-<md-content class="md-padding" layout-md="row" layout="row" style="padding:0 10px 0 10px;">
-  <div flex="33">
-    <h4>Add Members</h4>
-    <form method="post" action="/members/add">
+<form ng-submit="submit()">
+  <md-content class="md-padding" layout-md="row" layout="row" style="padding:0 10px 0 10px;">
+    <div flex="33">
+      <h4>Add Members</h4>
       <md-input-container class="md-block">
         <label>Name</label>
         <input ng-model="user.name">
@@ -20,16 +20,25 @@
         <input ng-model="user.email">
       </md-input-container>
       <md-input-container class="md-block">
-        <label>Birthday</label>
-        <input ng-model="user.birthday">
+        <label>Password</label>
+        <input ng-model="user.password" type="password">
       </md-input-container>
+      <md-input-container class="md-block">
+        <label>Birthday</label>
+        <md-datepicker ng-model="user.birthdate" md-placeholder="Birthdate"></md-datepicker>
+      </md-input-container>
+      <md-button class="md-raised md-primary" type="submit">Save Member</md-button>
+      <md-button class="md-raised md-default" ng-href="/members">Cancel</md-button>
+    </div>
+    <div flex="10">&nbsp;</div>
+    <div flex="30">
       <md-input-container class="md-block">
         <label>Balance</label>
         <input ng-model="user.balance">
       </md-input-container>
-      <md-button class="md-raised md-primary" type="submit">Login</md-button>
-      <md-button class="md-raised md-default" ng-href="/members" type="submit">Cancel</md-button>
-    </form>
-  </div>
-</md-content>
+      {{user.name}}<br/>
+      {{user.email}}<br/>
+    </div>
+  </md-content>
+</form>
 
