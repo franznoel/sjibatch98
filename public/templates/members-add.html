@@ -13,7 +13,7 @@
       <h3>Add Members</h3>
     </div>
   </md-content>
-  <md-card md-theme="green" ng-switch="errorStatus" md-theme-watch ng-show="errorStatus!=null">
+  <md-card ng-switch="errorStatus" ng-show="errorStatus!=null">
     <md-content class="md-padding">
       <div flex="100" ng-switch-when="error">The user could not be saved.</div>
       <div flex="100" ng-switch-when="success">Successfully saved user!</div>
