@@ -33,13 +33,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
     <!-- Angular Material Library -->
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-    <script src="//cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
     <script>
     'use strict';
     angular.module('sji98',[
         'ngRoute',
         'ngMaterial',
-        'FirebaseUser'
+        'FirebaseMembers'
       ]);
 
     angular.module('sji98').run(function (){
@@ -61,7 +60,7 @@
               templateUrl: 'templates/members.html'
             })
             .when('/members/add',{
-              controller: 'UserAdd',
+              controller: 'MembersAdd',
               templateUrl: 'templates/members-add.html'
             })
             .when('/accounts',{
@@ -72,12 +71,26 @@
             });
       });
 
-    angular.module('FirebaseUser',[
-        'ngResource',
-        'firebase'
+    angular.module('FirebaseMembers',[
+        'ngResource'
       ])
-      .controller('UserAdd',function($scope,$resource,$firebaseArray) {
+      .controller('MembersAdd',function($scope,$resource) {
+        $scope.error = null;
+        $scope.errorStatus = null;
+
         $scope.submit = function() {
+          var userRef = firebase.database().ref('members').set({
+            name: this.user.name,
+            email: this.user.email,
+            birthdate: this.user.birthdate.toString(),
+            balance: this.user.balance
+          }, function(error) {
+            if (error) {
+              $scope.errorStatus = "error";
+            } else {
+              $scope.errorStatus = "success";
+            }
+          });
         };
       });
     </script>

@@ -8,9 +8,19 @@
 </md-content>
 
 <form ng-submit="submit()">
+  <md-content class="md-padding">
+    <div flex="100">
+      <h3>Add Members</h3>
+    </div>
+  </md-content>
+  <md-card md-theme="green" ng-switch="errorStatus" md-theme-watch ng-show="errorStatus!=null">
+    <md-content class="md-padding">
+      <div flex="100" ng-switch-when="error">The user could not be saved.</div>
+      <div flex="100" ng-switch-when="success">Successfully saved user!</div>
+    </md-content>
+  </md-card>
   <md-content class="md-padding" layout-md="row" layout="row" style="padding:0 10px 0 10px;">
     <div flex="33">
-      <h4>Add Members</h4>
       <md-input-container class="md-block">
         <label>Name</label>
         <input ng-model="user.name">
@@ -18,10 +28,6 @@
       <md-input-container class="md-block">
         <label>Email</label>
         <input ng-model="user.email">
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Password</label>
-        <input ng-model="user.password" type="password">
       </md-input-container>
       <md-input-container class="md-block">
         <label>Birthday</label>
@@ -36,8 +42,6 @@
         <label>Balance</label>
         <input ng-model="user.balance">
       </md-input-container>
-      {{user.name}}<br/>
-      {{user.email}}<br/>
     </div>
   </md-content>
 </form>
