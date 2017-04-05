@@ -104,7 +104,7 @@
       .controller('MembersList',function($scope,$resource) {
         $scope.members = null;
         var membersRef = firebase.database().ref('members');
-        membersRef.on('value',function(snapshot) {
+        membersRef.limitToLast(100).on('value',function(snapshot) {
           // $scope.members.search = this.members.search;
           var members = snapshot.val();
           var membersList = [];
