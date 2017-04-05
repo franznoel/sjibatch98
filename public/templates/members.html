@@ -1,4 +1,7 @@
 <!-- Container #1 (see wireframe) -->
+<script>
+window.members.search = "";
+</script>
 <md-content ng-cloak>
   <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
     <h3 class="md-navbar-title" style="margin:10px 5px;">SJI Batch '98</h3>
@@ -14,7 +17,7 @@
     <section layout="row" layout-md="column" layout-align="left center" layout-wrap>
       <md-input-container flex="25">
         <label>Member Search</label>
-        <input type="text" name="memberSearch" ng-model="member.search" maxlength="100" />
+        <input type="text" id="memberSearch" name="memberSearch" ng-model="members.search" maxlength="100" />
       </md-input-container>
     </section>
     <table id="members-table" class="table table-hover table-bordered table-condensed">
@@ -31,8 +34,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr ng-show="!members.length">
           <td colspan="8">There are no members.</td>
+        </tr>
+        <tr ng-repeat="member in members">
+          <td>{{member.name}}</td>
+          <td>{{member.email}}</td>
+          <td>{{member.birthdate}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{member.balance}}</td>
+          <td></td>
         </tr>
       </tbody>
     </table>

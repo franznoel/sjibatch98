@@ -57,6 +57,7 @@
               templateUrl: 'templates/login.html'
             })
             .when('/members',{
+              controller: 'MembersList',
               templateUrl: 'templates/members.html'
             })
             .when('/members/add',{
@@ -79,12 +80,19 @@
         $scope.errorStatus = null;
 
         $scope.submit = function() {
-          var userRef = firebase.database().ref('members').set({
+          var memberKey = firebase.database().ref().child('members').push().key;
+
+          var newMember = {
+            key: memberKey,
             name: this.user.name,
             email: this.user.email,
             birthdate: this.user.birthdate.toString(),
             balance: this.user.balance
-          }, function(error) {
+          };
+
+          var members = {};
+          members['/members/' + memberKey] = newMember;
+          firebase.database().ref().update(members, function(error) {
             if (error) {
               $scope.errorStatus = "error";
             } else {
@@ -92,6 +100,30 @@
             }
           });
         };
+      })
+      .controller('MembersList',function($scope,$resource) {
+        $scope.members = null;
+        var membersRef = firebase.database().ref('members');
+        membersRef.on('value',function(snapshot) {
+          // $scope.members.search = this.members.search;
+          var members = snapshot.val();
+          var membersList = [];
+
+          for (var member in members) {
+            var bdate = new Date(members[member].birthdate);
+
+            membersList.push({
+              key: member,
+              name: members[member].name,
+              email: members[member].email,
+              balance: members[member].balance,
+              birthdate: (bdate.getMonth()+1) + '/' + bdate.getDate() + '/' + bdate.getYear()
+            });
+          }
+
+          $scope.members = membersList;
+          document.querySelector('#memberSearch').focus();
+        });
       });
     </script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css" />
