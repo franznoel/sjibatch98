@@ -60,6 +60,10 @@
               controller: 'MembersList',
               templateUrl: 'templates/members.html'
             })
+            .when('/members/:id',{
+              controller: 'MemberDetail',
+              templateUrl: 'templates/members-id.html'
+            })
             .when('/members/add',{
               controller: 'MembersAdd',
               templateUrl: 'templates/members-add.html'
@@ -101,8 +105,16 @@
           });
         };
       })
-      .controller('MembersList',function($scope,$resource) {
+      .controller('MembersList',function($scope,$location,$resource) {
         $scope.members = null;
+
+        $scope.redirectTo = function() {
+          var member = document.querySelector('.member');
+          var memberKey = member.getAttribute("data-memberKey");
+          // console.log('/members/'+memberKey);
+          $location.path('/members/'+memberKey);
+        };
+
         var membersRef = firebase.database().ref('members');
         membersRef.limitToLast(100).on('value',function(snapshot) {
           // $scope.members.search = this.members.search;
@@ -124,7 +136,11 @@
           $scope.members = membersList;
           document.querySelector('#memberSearch').focus();
         });
+      })
+      .controller('MemberDetail',function($scope,$resource) {
+        var membersRef = firebase.database().ref('members').key;
       });
+
     </script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css" />
     <base href="/">
