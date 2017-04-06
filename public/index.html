@@ -56,17 +56,17 @@
             .when('/',{
               templateUrl: 'templates/login.html'
             })
-            .when('/members',{
-              controller: 'MembersList',
-              templateUrl: 'templates/members.html'
+            .when('/members/add',{
+              controller: 'MembersAdd',
+              templateUrl: 'templates/members-add.html'
             })
             .when('/members/:id',{
               controller: 'MemberDetail',
               templateUrl: 'templates/members-id.html'
             })
-            .when('/members/add',{
-              controller: 'MembersAdd',
-              templateUrl: 'templates/members-add.html'
+            .when('/members',{
+              controller: 'MembersList',
+              templateUrl: 'templates/members.html'
             })
             .when('/accounts',{
               templateUrl: 'templates/accounts.html'
