@@ -1,0 +1,49 @@
+<!-- Container #1 (see wireframe) -->
+<script>
+window.members.search = "";
+</script>
+<md-content ng-cloak>
+  <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+    <h3 class="md-navbar-title" style="margin:10px 5px;">SJI Batch '98</h3>
+    <md-nav-item md-nav-click="goto('members')" name="members">Members</md-nav-item>
+    <md-nav-item md-nav-click="goto('logout')" name="logout">Logout</md-nav-item>
+  </md-nav-bar>
+</md-content>
+
+<md-content style="padding:0 10px 0 10px;">
+    <section>
+        <md-button class="md-raised md-default" style="margin:10px 0;" ng-href="/members">Go Back</md-button>
+    </section>
+    <section>
+      <p><b>Name: </b>{{member.name}}</p>
+      <p><b>Email: </b>{{member.email}}</p>
+      <p><b>Birthday: </b>{{member.birthday}}</p>
+      <p><b>Roles: </b>{{member.birthday}}</p>
+    </section>
+    <hr/>
+    <section>
+      <h4>Transactions</h4>
+      <table id="transactions-table" class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Payment Date</th>
+            <th>Payment Due</th>
+            <th>Paid Amount</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-show="!transactions.length">
+            <td colspan="4">There are no transactions.</td>
+          </tr>
+          <tr ng-repeat="transaction in transactions" ng-click="redirectTo()" data-memberKey="{{member.key}}" class="transaction">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{member.balance}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+</md-content>
+
