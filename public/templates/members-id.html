@@ -14,34 +14,36 @@ window.members.search = "";
     <section>
         <md-button class="md-raised md-default" style="margin:10px 0;" ng-href="/members">Go Back</md-button>
     </section>
-    <table id="members-table" class="table table-hover table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Birthday</th>
-          <th>Payment Due</th>
-          <th>Paid Amount</th>
-          <th>Balance</th>
-          <th>Roles</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-show="!members.length">
-          <td colspan="8">There are no members.</td>
-        </tr>
-        <tr ng-repeat="member in members" ng-click="redirectTo()" data-memberKey="{{member.key}}" class="member">
-          <td>{{member.name}}</td>
-          <td>{{member.email}}</td>
-          <td>{{member.birthdate}}</td>
-          <td></td>
-          <td></td>
-          <td>{{member.balance}}</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <section>
+      <p><b>Name: </b>{{member.name}}</p>
+      <p><b>Email: </b>{{member.email}}</p>
+      <p><b>Birthday: </b>{{member.birthday}}</p>
+      <p><b>Roles: </b>{{member.birthday}}</p>
+    </section>
+    <hr/>
+    <section>
+      <h4>Transactions</h4>
+      <table id="transactions-table" class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Payment Date</th>
+            <th>Payment Due</th>
+            <th>Paid Amount</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-show="!transactions.length">
+            <td colspan="4">There are no transactions.</td>
+          </tr>
+          <tr ng-repeat="transaction in transactions" ng-click="redirectTo()" data-memberKey="{{member.key}}" class="transaction">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{member.balance}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 </md-content>
 
