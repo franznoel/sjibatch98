@@ -61,7 +61,7 @@
               templateUrl: 'templates/members-add.html'
             })
             .when('/members/:id',{
-              controller: 'MemberDetail',
+              controller: 'Member',
               templateUrl: 'templates/members-id.html'
             })
             .when('/members',{
@@ -113,7 +113,7 @@
         var membersObject = $firebaseObject(membersRef);
         membersObject.$bindTo($scope,'members');
       })
-      .controller('MemberDetail',function($scope) {
+      .controller('Member',function($scope) {
         var membersRef = firebase.database().ref('members').key;
       });
 
