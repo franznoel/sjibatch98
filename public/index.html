@@ -57,7 +57,7 @@
               templateUrl: 'templates/login.html'
             })
             .when('/members/add',{
-              controller: 'MembersAdd',
+              controller: 'Members',
               templateUrl: 'templates/members-add.html'
             })
             .when('/members/:id',{
@@ -65,7 +65,7 @@
               templateUrl: 'templates/members-id.html'
             })
             .when('/members',{
-              controller: 'MembersList',
+              controller: 'Members',
               templateUrl: 'templates/members.html'
             })
             .when('/accounts',{
@@ -79,10 +79,12 @@
     angular.module('FirebaseMembers',[
         'firebase'
       ])
-      .controller('MembersAdd',function($scope,$firebaseArray) {
+      .controller('Members',function($scope,$location,$firebaseArray,$firebaseObject) {
+        var membersRef = firebase.database().ref().child('members');
+
         $scope.submit = function() {
-          var membersRef = firebase.database().ref().child('members');
           var members = $firebaseArray(membersRef);
+
           members.$add({
             name: this.user.name,
             email: this.user.email,
@@ -91,12 +93,7 @@
           }).catch(function(errors) {
             console.log('Errors:' + errors);
           });
-
-          $scope.members = $firebaseArray(membersRef);
         };
-      })
-      .controller('MembersList',function($scope,$location) {
-        $scope.members = null;
 
         $scope.redirectTo = function() {
           var member = document.querySelector('.member');
@@ -105,27 +102,12 @@
           $location.path('/members/'+memberKey);
         };
 
-        var membersRef = firebase.database().ref('members');
-        membersRef.limitToLast(100).on('value',function(snapshot) {
-          // $scope.members.search = this.members.search;
-          var members = snapshot.val();
-          var membersList = [];
+        $scope.members = $firebaseArray(membersRef);
 
-          for (var member in members) {
-            var bdate = new Date(members[member].birthdate);
+        console.log($scope.members);
 
-            membersList.push({
-              key: member,
-              name: members[member].name,
-              email: members[member].email,
-              balance: members[member].balance,
-              birthdate: (bdate.getMonth()+1) + '/' + bdate.getDate() + '/' + bdate.getYear()
-            });
-          }
-
-          $scope.members = membersList;
-          document.querySelector('#memberSearch').focus();
-        });
+        var membersObject = $firebaseObject(membersRef);
+        membersObject.$bindTo($scope,'members');
       })
       .controller('MemberDetail',function($scope) {
         var membersRef = firebase.database().ref('members').key;

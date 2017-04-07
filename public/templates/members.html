@@ -34,7 +34,7 @@ window.members.search = "";
         </tr>
       </thead>
       <tbody>
-        <tr ng-show="!members.length">
+        <tr ng-show="!members">
           <td colspan="8">There are no members.</td>
         </tr>
         <tr ng-repeat="member in members" ng-click="redirectTo()" data-memberKey="{{member.key}}" class="member">
