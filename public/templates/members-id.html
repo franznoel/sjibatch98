@@ -18,28 +18,26 @@ window.members.search = "";
       <h3><b>{{member.name}}</b></h3>
       <p><b>Email: </b>{{member.email}}</p>
       <p><b>Birthday: </b>{{member.birthdate}}</p>
+      <p><b>Balance: </b>{{member.balance | currency:'$ ':2}}</p>
     </section>
     <hr/>
     <section>
-      <h4>Transactions</h4>
+      <h4>Payment History</h4>
+      <md-button class="md-raised md-primary" ng-href="/members" style="margin:10px 0;">Add Payment</md-button>
       <table id="transactions-table" class="table table-hover table-bordered table-condensed">
         <thead>
           <tr>
             <th>Payment Date</th>
-            <th>Payment Due</th>
             <th>Paid Amount</th>
-            <th>Balance</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-show="!transactions.length">
-            <td colspan="4">There are no transactions.</td>
+          <tr ng-show="!transactions">
+            <td colspan="2">There are no transactions.</td>
           </tr>
-          <tr ng-repeat="transaction in transactions" ng-click="redirectTo()" data-memberKey="{{member.key}}" class="transaction">
+          <tr ng-repeat="transaction in transactions" class="transaction">
             <td></td>
             <td></td>
-            <td></td>
-            <td>{{member.balance}}</td>
           </tr>
         </tbody>
       </table>
