@@ -80,27 +80,18 @@
         'ngResource'
       ])
       .controller('MembersAdd',function($scope,$resource) {
-        $scope.error = null;
-        $scope.errorStatus = null;
-
         $scope.submit = function() {
-          var memberKey = firebase.database().ref().child('members').push().key;
-
-          var newMember = {
-            key: memberKey,
+          var membersRef = firebase.database().ref().child('members');
+          membersRef.push().set({
             name: this.user.name,
             email: this.user.email,
             birthdate: this.user.birthdate.toString(),
             balance: this.user.balance
-          };
-
-          var members = {};
-          members['/members/' + memberKey] = newMember;
-          firebase.database().ref().update(members, function(error) {
+          },function(error) {
             if (error) {
-              $scope.errorStatus = "error";
+              console.log("Error!");
             } else {
-              $scope.errorStatus = "success";
+              console.log("Success!");
             }
           });
         };
