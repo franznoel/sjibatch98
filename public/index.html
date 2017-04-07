@@ -64,6 +64,10 @@
               controller: 'Member',
               templateUrl: 'templates/members-id.html'
             })
+            .when('/members/:id/payment',{
+              controller: 'Member',
+              templateUrl: 'templates/members-add-payment.html'
+            })
             .when('/members',{
               controller: 'Members',
               templateUrl: 'templates/members.html'
