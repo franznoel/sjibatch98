@@ -90,21 +90,25 @@
             email: this.user.email,
             birthdate: this.user.birthdate.toString(),
             balance: this.user.balance
+          }).then(function(ref) {
+            // Add key to record
+            var memberKey = ref.key;
+            var member = members.$getRecord(memberKey);
+            member.key = memberKey;
+            members.$save(member).then(function(ref) {
+              console.log("Sucessfully saved data " + ref.key);
+            });
+            members.$indexFor(memberKey);
           }).catch(function(errors) {
             console.log('Errors:' + errors);
           });
         };
 
         $scope.redirectTo = function() {
-          var member = document.querySelector('.member');
-          var memberKey = member.getAttribute("data-memberKey");
-          // console.log('/members/'+memberKey);
-          $location.path('/members/'+memberKey);
+          $location.path('/members/'+this.member.key);
         };
 
         $scope.members = $firebaseArray(membersRef);
-
-        console.log($scope.members);
 
         var membersObject = $firebaseObject(membersRef);
         membersObject.$bindTo($scope,'members');
