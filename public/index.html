@@ -76,10 +76,8 @@
             });
       });
 
-    angular.module('FirebaseMembers',[
-        'ngResource'
-      ])
-      .controller('MembersAdd',function($scope,$resource) {
+    angular.module('FirebaseMembers',[])
+      .controller('MembersAdd',function($scope) {
         $scope.submit = function() {
           var membersRef = firebase.database().ref().child('members');
           membersRef.push().set({
@@ -96,7 +94,7 @@
           });
         };
       })
-      .controller('MembersList',function($scope,$location,$resource) {
+      .controller('MembersList',function($scope,$location) {
         $scope.members = null;
 
         $scope.redirectTo = function() {
@@ -128,7 +126,7 @@
           document.querySelector('#memberSearch').focus();
         });
       })
-      .controller('MemberDetail',function($scope,$resource) {
+      .controller('MemberDetail',function($scope) {
         var membersRef = firebase.database().ref('members').key;
       });
 
