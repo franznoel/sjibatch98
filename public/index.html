@@ -10,6 +10,16 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     -->
 
+    <!-- AngularJs -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.min.js"></script>
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <!-- Angular Material Library -->
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
     <!-- Firebase -->
     <script src="//www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
     <script>
@@ -22,17 +32,7 @@
       };
       firebase.initializeApp(config);
     </script>
-
-    <!-- AngularJs -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.min.js"></script>
-    <!-- Angular Material requires Angular.js Libraries -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-    <!-- Angular Material Library -->
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
     <script>
     'use strict';
     angular.module('sji98',[
@@ -57,15 +57,15 @@
               templateUrl: 'templates/login.html'
             })
             .when('/members/add',{
-              controller: 'MembersAdd',
+              controller: 'Members',
               templateUrl: 'templates/members-add.html'
             })
             .when('/members/:id',{
-              controller: 'MemberDetail',
+              controller: 'Member',
               templateUrl: 'templates/members-id.html'
             })
             .when('/members',{
-              controller: 'MembersList',
+              controller: 'Members',
               templateUrl: 'templates/members.html'
             })
             .when('/accounts',{
@@ -77,68 +77,56 @@
       });
 
     angular.module('FirebaseMembers',[
-        'ngResource'
+        'firebase'
       ])
-      .controller('MembersAdd',function($scope,$resource) {
-        $scope.error = null;
-        $scope.errorStatus = null;
+      .controller('Members',function($scope,$location,$firebaseArray,$firebaseObject) {
+        var membersRef = firebase.database().ref().child('members');
 
         $scope.submit = function() {
-          var memberKey = firebase.database().ref().child('members').push().key;
+          var members = $firebaseArray(membersRef);
 
-          var newMember = {
-            key: memberKey,
+          members.$add({
             name: this.user.name,
             email: this.user.email,
             birthdate: this.user.birthdate.toString(),
             balance: this.user.balance
-          };
-
-          var members = {};
-          members['/members/' + memberKey] = newMember;
-          firebase.database().ref().update(members, function(error) {
-            if (error) {
-              $scope.errorStatus = "error";
-            } else {
-              $scope.errorStatus = "success";
-            }
+          }).then(function(ref) {
+            // Add key to record
+            var memberKey = ref.key;
+            var member = members.$getRecord(memberKey);
+            member.key = memberKey;
+            members.$save(member).then(function(ref) {
+              console.log("Sucessfully saved data " + ref.key);
+            });
+            members.$indexFor(memberKey);
+          }).catch(function(errors) {
+            console.log('Errors:' + errors);
           });
         };
-      })
-      .controller('MembersList',function($scope,$location,$resource) {
-        $scope.members = null;
 
         $scope.redirectTo = function() {
-          var member = document.querySelector('.member');
-          var memberKey = member.getAttribute("data-memberKey");
-          // console.log('/members/'+memberKey);
-          $location.path('/members/'+memberKey);
+          $location.path('/members/'+this.member.key);
         };
 
-        var membersRef = firebase.database().ref('members');
-        membersRef.limitToLast(100).on('value',function(snapshot) {
-          // $scope.members.search = this.members.search;
-          var members = snapshot.val();
-          var membersList = [];
+        $scope.members = $firebaseArray(membersRef);
 
-          for (var member in members) {
-            var bdate = new Date(members[member].birthdate);
-
-            membersList.push({
-              key: member,
-              name: members[member].name,
-              email: members[member].email,
-              balance: members[member].balance,
-              birthdate: (bdate.getMonth()+1) + '/' + bdate.getDate() + '/' + bdate.getYear()
-            });
-          }
-
-          $scope.members = membersList;
-          document.querySelector('#memberSearch').focus();
-        });
+        var membersObject = $firebaseObject(membersRef);
+        membersObject.$bindTo($scope,'members');
       })
-      .controller('MemberDetail',function($scope,$resource) {
-        var membersRef = firebase.database().ref('members').key;
+      .controller('Member',function($scope,$location,$firebaseArray,$firebaseObject) {
+        var membersRef = firebase.database().ref().child('members');
+        var memberKey = $location.path().split('/')[2].toString();
+        var members = $firebaseArray(membersRef);
+
+        members.$loaded().then(function(ref) {
+          $scope.member = members.$getRecord(memberKey);
+          var memberIndex = members.$indexFor(memberKey);
+        })
+
+        $scope.members = $firebaseArray(membersRef);
+
+        var membersObject = $firebaseObject(membersRef);
+        membersObject.$bindTo($scope,'members');
       });
 
     </script>
