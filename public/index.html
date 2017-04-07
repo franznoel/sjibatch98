@@ -10,6 +10,16 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     -->
 
+    <!-- AngularJs -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.min.js"></script>
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <!-- Angular Material Library -->
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
     <!-- Firebase -->
     <script src="//www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
     <script>
@@ -22,17 +32,7 @@
       };
       firebase.initializeApp(config);
     </script>
-
-    <!-- AngularJs -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-route.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-resource.min.js"></script>
-    <!-- Angular Material requires Angular.js Libraries -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-    <!-- Angular Material Library -->
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
     <script>
     'use strict';
     angular.module('sji98',[
@@ -76,22 +76,23 @@
             });
       });
 
-    angular.module('FirebaseMembers',[])
-      .controller('MembersAdd',function($scope) {
+    angular.module('FirebaseMembers',[
+        'firebase'
+      ])
+      .controller('MembersAdd',function($scope,$firebaseArray) {
         $scope.submit = function() {
           var membersRef = firebase.database().ref().child('members');
-          membersRef.push().set({
+          var members = $firebaseArray(membersRef);
+          members.$add({
             name: this.user.name,
             email: this.user.email,
             birthdate: this.user.birthdate.toString(),
             balance: this.user.balance
-          },function(error) {
-            if (error) {
-              console.log("Error!");
-            } else {
-              console.log("Success!");
-            }
+          }).catch(function(errors) {
+            console.log('Errors:' + errors);
           });
+
+          $scope.members = $firebaseArray(membersRef);
         };
       })
       .controller('MembersList',function($scope,$location) {
