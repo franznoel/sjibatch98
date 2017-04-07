@@ -113,8 +113,20 @@
         var membersObject = $firebaseObject(membersRef);
         membersObject.$bindTo($scope,'members');
       })
-      .controller('Member',function($scope) {
-        var membersRef = firebase.database().ref('members').key;
+      .controller('Member',function($scope,$location,$firebaseArray,$firebaseObject) {
+        var membersRef = firebase.database().ref().child('members');
+        var memberKey = $location.path().split('/')[2].toString();
+        var members = $firebaseArray(membersRef);
+
+        members.$loaded().then(function(ref) {
+          $scope.member = members.$getRecord(memberKey);
+          var memberIndex = members.$indexFor(memberKey);
+        })
+
+        $scope.members = $firebaseArray(membersRef);
+
+        var membersObject = $firebaseObject(membersRef);
+        membersObject.$bindTo($scope,'members');
       });
 
     </script>
