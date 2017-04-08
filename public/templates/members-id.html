@@ -14,16 +14,35 @@ window.members.search = "";
     <section>
         <md-button class="md-raised md-default" style="margin:10px 0;" ng-href="/members">Go Back</md-button>
     </section>
-    <section>
-      <h3><b>{{member.name}}</b></h3>
-      <p><b>Email: </b>{{member.email}}</p>
-      <p><b>Birthday: </b>{{member.birthdate}}</p>
-      <p><b>Balance: </b>{{member.balance | currency:'$ ':2}}</p>
-    </section>
+    <md-content layout="row">
+      <section flex="30">
+        <h3><b>{{member.name}}</b></h3>
+        <p><b>Email: </b>{{member.email}}</p>
+        <p><b>Birthday: </b>{{member.birthdate}}</p>
+        <p><b>Balance: </b>{{member.balance | currency:'$ ':2}}</p>
+      </section>
+      <md-card flex-offset="30" flex="40">
+        <md-card-content>
+          <form method="post">
+            <h4>Add Payment</h4>
+            <div layout="row">
+              <md-input-container flex="40">
+                <label>Date</label>
+                <md-datepicker ng-model="transaction.date" md-placeholder="Date" required></md-datepicker>
+              </md-input-container>
+              <md-input-container flex="60">
+                <label>Payment Amount</label>
+                <input ng-model="transaction.amount" type="number" required>
+              </md-input-container>
+            </div>
+            <md-button class="md-raised md-primary" type="submit">Add Payment</md-button>
+          </form>
+        </md-card-content>
+      </md-card>
+    </md-content>
     <hr/>
     <section>
       <h4>Payment History</h4>
-      <md-button class="md-raised md-primary" ng-href="/members/{{member.key}}/payment" style="margin:10px 0;">Add Payment</md-button>
       <table id="transactions-table" class="table table-hover table-bordered table-condensed">
         <thead>
           <tr>
