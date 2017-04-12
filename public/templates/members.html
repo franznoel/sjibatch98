@@ -40,7 +40,7 @@ window.members.search = "";
         <tr ng-repeat="member in members" ng-click="redirectTo(this)" class="member">
           <td>{{member.name}}</td>
           <td>{{member.email}}</td>
-          <td>{{member.birthdate}}</td>
+          <td>{{member.birthdate | date:'MMM d, y'}}</td>
           <td></td>
           <td></td>
           <td>{{member.balance | currency:'$ ':2}}</td>
