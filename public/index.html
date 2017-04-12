@@ -88,7 +88,7 @@
           members.$add({
             name: this.user.name,
             email: this.user.email,
-            birthdate: this.user.birthdate.toString(),
+            birthdate: this.user.birthdate.getTime(),
             balance: this.user.balance
           }).then(function(ref) {
             // Add key to record
