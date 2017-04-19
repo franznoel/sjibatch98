@@ -96,7 +96,7 @@
             var member = members.$getRecord(memberKey);
             member.key = memberKey;
             members.$save(member).then(function(ref) {
-              console.log("Sucessfully saved data " + ref.key);
+              console.log("Sucessfully saved member " + ref.key);
             });
             members.$indexFor(memberKey);
           }).catch(function(errors) {
@@ -115,18 +115,41 @@
       })
       .controller('Member',function($scope,$location,$firebaseArray,$firebaseObject) {
         var membersRef = firebase.database().ref().child('members');
+        var tnxRef = firebase.database().ref().child('transactions');
         var memberKey = $location.path().split('/')[2].toString();
         var members = $firebaseArray(membersRef);
+        var transactions = $firebaseArray(tnxRef);
 
         members.$loaded().then(function(ref) {
           $scope.member = members.$getRecord(memberKey);
           var memberIndex = members.$indexFor(memberKey);
-        })
+        });
+
+        $scope.addPayment = function() {
+          var transactions = $firebaseArray(tnxRef);
+
+          transactions.$add({
+            date: this.transaction.date.getTime(),
+            amount: this.transaction.amount,
+          }).then(function(ref) {
+            // Add key to record
+            var tnxKey = ref.key;
+            var tnx = transactions.$getRecord(tnxKey);
+            tnx.key = tnxKey;
+            tnx.$save(tnx).then(function(ref) {
+              console.log("Sucessfully saved transaction " + ref.key);
+            });
+            tnx.$indexFor(tnxKey);
+          }).catch(function(errors) {
+            console.log('Errors:' + errors);
+          });
+        };
 
         $scope.members = $firebaseArray(membersRef);
 
         var membersObject = $firebaseObject(membersRef);
         membersObject.$bindTo($scope,'members');
+
       });
 
     </script>
