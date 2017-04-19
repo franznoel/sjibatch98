@@ -14,32 +14,49 @@ window.members.search = "";
     <section>
         <md-button class="md-raised md-default" style="margin:10px 0;" ng-href="/members">Go Back</md-button>
     </section>
-    <section>
-      <h3><b>{{member.name}}</b></h3>
-      <p><b>Email: </b>{{member.email}}</p>
-      <p><b>Birthday: </b>{{member.birthdate}}</p>
-    </section>
+    <md-content layout="row">
+      <section flex="30">
+        <h3><b>{{member.name}}</b></h3>
+        <p><b>Email: </b>{{member.email}}</p>
+        <p><b>Birthday: </b>{{member.birthdate | date:'MMM d, y'}}</p>
+        <p><b>Balance: </b>{{member.balance | currency:'$ ':2}}</p>
+      </section>
+      <md-card flex-offset="30" flex="40">
+        <md-card-content>
+          <form ng-submit="addPayment()">
+            <h4>Add Payment</h4>
+            <div layout="row">
+              <md-input-container flex="40">
+                <label>Date</label>
+                <md-datepicker ng-model="transaction.date" md-placeholder="Date" required></md-datepicker>
+              </md-input-container>
+              <md-input-container flex="60">
+                <label>Payment Amount</label>
+                <input ng-model="transaction.amount" type="number" required>
+              </md-input-container>
+            </div>
+            <md-button class="md-raised md-primary" type="submit">Add Payment</md-button>
+          </form>
+        </md-card-content>
+      </md-card>
+    </md-content>
     <hr/>
     <section>
-      <h4>Transactions</h4>
+      <h4>Payment History</h4>
       <table id="transactions-table" class="table table-hover table-bordered table-condensed">
         <thead>
           <tr>
             <th>Payment Date</th>
-            <th>Payment Due</th>
             <th>Paid Amount</th>
-            <th>Balance</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-show="!transactions.length">
-            <td colspan="4">There are no transactions.</td>
+          <tr ng-show="!transactions">
+            <td colspan="2">There are no transactions.</td>
           </tr>
-          <tr ng-repeat="transaction in transactions" ng-click="redirectTo()" data-memberKey="{{member.key}}" class="transaction">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{member.balance}}</td>
+          <tr ng-repeat="transaction in transactions" class="transaction">
+            <td>{{transaction.date | date:'MMM d, y'}}</td>
+            <td>{{transaction.amount | currency:'$ ':2}}</td>
           </tr>
         </tbody>
       </table>
