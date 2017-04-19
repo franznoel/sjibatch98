@@ -18,7 +18,7 @@ window.members.search = "";
       <section flex="30">
         <h3><b>{{member.name}}</b></h3>
         <p><b>Email: </b>{{member.email}}</p>
-        <p><b>Birthday: </b>{{member.birthdate}}</p>
+        <p><b>Birthday: </b>{{member.birthdate | date:'MMM d, y'}}</p>
         <p><b>Balance: </b>{{member.balance | currency:'$ ':2}}</p>
       </section>
       <md-card flex-offset="30" flex="40">
