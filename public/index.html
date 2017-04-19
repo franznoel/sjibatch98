@@ -129,13 +129,13 @@
           var transactions = $firebaseArray(tnxRef);
 
           transactions.$add({
+            memberId: $scope.member.$id,
             date: this.transaction.date.getTime(),
             amount: this.transaction.amount,
           }).then(function(ref) {
             // Add key to record
             var tnxKey = ref.key;
             var tnx = transactions.$getRecord(tnxKey);
-            tnx.key = tnxKey;
             tnx.$save(tnx).then(function(ref) {
               console.log("Sucessfully saved transaction " + ref.key);
             });
