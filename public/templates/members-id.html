@@ -55,8 +55,8 @@ window.members.search = "";
             <td colspan="2">There are no transactions.</td>
           </tr>
           <tr ng-repeat="transaction in transactions" class="transaction">
-            <td></td>
-            <td></td>
+            <td>{{transaction.date | date:'MMM d, y'}}</td>
+            <td>{{transaction.amount | currency:'$ ':2}}</td>
           </tr>
         </tbody>
       </table>
