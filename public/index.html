@@ -145,10 +145,6 @@
           });
         };
 
-        $scope.members = $firebaseArray(membersRef);
-        var membersObject = $firebaseObject(membersRef);
-        membersObject.$bindTo($scope,'members');
-
         $scope.transactions = $firebaseArray(tnxRef);
         var tnxObject = $firebaseObject(tnxRef);
         tnxObject.$bindTo($scope,'transactions');
