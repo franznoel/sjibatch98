@@ -35,17 +35,18 @@
     <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
     <script>
     'use strict';
-    angular.module('sji98',[
+
+    var sji98 = angular.module('sji98',[
         'ngRoute',
         'ngMaterial',
         'FirebaseMembers'
       ]);
 
-    angular.module('sji98').run(function (){
+    sji98.run(function (){
       console.log("Running 'sji98' module");
     });
 
-    angular.module('sji98')
+    sji98
       .config(function($locationProvider,$routeProvider,$mdThemingProvider) {
           $mdThemingProvider.theme('default')
             .primaryPalette('blue');
