@@ -107,7 +107,7 @@
             $location.path('/members/'+this.member.key);
           };
 
-          $scope.members = $firebaseArray($rootScope.membersRef);
+          $rootScope.members = $firebaseArray($rootScope.membersRef);
 
           var membersObject = $firebaseObject($rootScope.membersRef);
           membersObject.$bindTo($scope,'members');
@@ -116,7 +116,7 @@
           $rootScope.membersRef = firebase.database().ref().child('members');
           var tnxRef = firebase.database().ref().child('transactions');
           var memberKey = $location.path().split('/')[2].toString();
-          var members = $firebaseArray($rootScope.membersRef);
+          $rootScope.members = $firebaseArray($rootScope.membersRef);
           var transactions = $firebaseArray(tnxRef);
 
           $rootScope.members.$loaded().then(function(ref) {
