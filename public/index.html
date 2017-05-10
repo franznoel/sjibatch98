@@ -121,7 +121,7 @@
 
           $rootScope.members.$loaded().then(function(ref) {
             $scope.member = $rootScope.members.$getRecord(memberKey);
-            var memberIndex = members.$indexFor(memberKey);
+            var memberIndex = $rootScope.members.$indexFor(memberKey);
           });
 
           $scope.addPayment = function() {
