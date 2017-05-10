@@ -114,10 +114,10 @@
         })
         .controller('Member',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
           $rootScope.membersRef = firebase.database().ref().child('members');
-          var tnxRef = firebase.database().ref().child('transactions');
+          $rootScope.tnxRef = firebase.database().ref().child('transactions');
           var memberKey = $location.path().split('/')[2].toString();
           $rootScope.members = $firebaseArray($rootScope.membersRef);
-          var transactions = $firebaseArray(tnxRef);
+          var transactions = $firebaseArray($rootScope.tnxRef);
 
           $rootScope.members.$loaded().then(function(ref) {
             $scope.member = $rootScope.members.$getRecord(memberKey);
@@ -125,7 +125,7 @@
           });
 
           $scope.addPayment = function() {
-            var transactions = $firebaseArray(tnxRef);
+            var transactions = $firebaseArray($rootScope.tnxRef);
 
             transactions.$add({
               memberId: $scope.member.$id,
@@ -144,8 +144,8 @@
             });
           };
 
-          $scope.transactions = $firebaseArray(tnxRef);
-          var tnxObject = $firebaseObject(tnxRef);
+          $scope.transactions = $firebaseArray($rootScope.tnxRef);
+          var tnxObject = $firebaseObject($rootScope.tnxRef);
           tnxObject.$bindTo($scope,'transactions');
 
         });
