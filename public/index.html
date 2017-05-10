@@ -78,13 +78,13 @@
       });
 
       sji98
-        .controller('Members',function($scope,$location,$firebaseArray,$firebaseObject) {
-          var membersRef = firebase.database().ref().child('members');
+        .controller('Members',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+          $rootScope.membersRef = firebase.database().ref().child('members');
 
           $scope.submit = function() {
-            var members = $firebaseArray(membersRef);
+            $rootScope.members = $firebaseArray($rootScope.membersRef);
 
-            members.$add({
+            $rootScope.members.$add({
               name: this.user.name,
               email: this.user.email,
               birthdate: this.user.birthdate.getTime(),
@@ -92,12 +92,12 @@
             }).then(function(ref) {
               // Add key to record
               var memberKey = ref.key;
-              var member = members.$getRecord(memberKey);
+              var member = $rootScope.members.$getRecord(memberKey);
               member.key = memberKey;
-              members.$save(member).then(function(ref) {
+              $rootScope.members.$save(member).then(function(ref) {
                 console.log("Sucessfully saved member " + ref.key);
               });
-              members.$indexFor(memberKey);
+              $rootScope.members.$indexFor(memberKey);
             }).catch(function(errors) {
               console.log('Errors:' + errors);
             });
@@ -107,20 +107,20 @@
             $location.path('/members/'+this.member.key);
           };
 
-          $scope.members = $firebaseArray(membersRef);
+          $scope.members = $firebaseArray($rootScope.membersRef);
 
-          var membersObject = $firebaseObject(membersRef);
+          var membersObject = $firebaseObject($rootScope.membersRef);
           membersObject.$bindTo($scope,'members');
         })
-        .controller('Member',function($scope,$location,$firebaseArray,$firebaseObject) {
-          var membersRef = firebase.database().ref().child('members');
+        .controller('Member',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+          $rootScope.membersRef = firebase.database().ref().child('members');
           var tnxRef = firebase.database().ref().child('transactions');
           var memberKey = $location.path().split('/')[2].toString();
-          var members = $firebaseArray(membersRef);
+          var members = $firebaseArray($rootScope.membersRef);
           var transactions = $firebaseArray(tnxRef);
 
-          members.$loaded().then(function(ref) {
-            $scope.member = members.$getRecord(memberKey);
+          $rootScope.members.$loaded().then(function(ref) {
+            $scope.member = $rootScope.members.$getRecord(memberKey);
             var memberIndex = members.$indexFor(memberKey);
           });
 
