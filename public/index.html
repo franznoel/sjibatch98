@@ -111,7 +111,9 @@
 
           var membersObject = $firebaseObject($rootScope.membersRef);
           membersObject.$bindTo($scope,'members');
-        })
+        });
+
+      sji98
         .controller('Member',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
           $rootScope.membersRef = firebase.database().ref().child('members');
           $rootScope.tnxRef = firebase.database().ref().child('transactions');
