@@ -8,18 +8,18 @@
 </md-content>
 
 <form ng-submit="submit()">
-  <md-content class="md-padding">
+  <md-content layout-padding>
     <div flex="100">
       <h3>Add Members</h3>
     </div>
   </md-content>
   <md-card ng-switch="errorStatus" ng-show="errorStatus!=null">
-    <md-content class="md-padding">
+    <md-content layout-padding>
       <div flex="100" ng-switch-when="error">The user could not be saved.</div>
       <div flex="100" ng-switch-when="success">Successfully saved user!</div>
     </md-content>
   </md-card>
-  <md-content class="md-padding" layout-md="row" layout="row" style="padding:0 10px 0 10px;">
+  <md-content layout-padding layout-md="row" layout="row">
     <div flex="33">
       <md-input-container class="md-block">
         <label>Name</label>

@@ -35,17 +35,18 @@
     <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
     <script>
     'use strict';
-    angular.module('sji98',[
+
+    var sji98 = angular.module('sji98',[
         'ngRoute',
         'ngMaterial',
-        'FirebaseMembers'
+        'firebase'
       ]);
 
-    angular.module('sji98').run(function (){
+    sji98.run(function (){
       console.log("Running 'sji98' module");
     });
 
-    angular.module('sji98')
+    sji98
       .config(function($locationProvider,$routeProvider,$mdThemingProvider) {
           $mdThemingProvider.theme('default')
             .primaryPalette('blue');
@@ -76,84 +77,93 @@
             });
       });
 
-    angular.module('FirebaseMembers',[
-        'firebase'
-      ])
-      .controller('Members',function($scope,$location,$firebaseArray,$firebaseObject) {
-        var membersRef = firebase.database().ref().child('members');
+      sji98
+        .controller('Members',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+          $rootScope.membersRef = firebase.database().ref().child('members');
 
-        $scope.submit = function() {
-          var members = $firebaseArray(membersRef);
+          $scope.submit = function() {
+            $rootScope.members = $firebaseArray($rootScope.membersRef);
 
-          members.$add({
-            name: this.user.name,
-            email: this.user.email,
-            birthdate: this.user.birthdate.getTime(),
-            balance: this.user.balance
-          }).then(function(ref) {
-            // Add key to record
-            var memberKey = ref.key;
-            var member = members.$getRecord(memberKey);
-            member.key = memberKey;
-            members.$save(member).then(function(ref) {
-              console.log("Sucessfully saved member " + ref.key);
+            $rootScope.members.$add({
+              name: this.user.name,
+              email: this.user.email,
+              birthdate: this.user.birthdate.getTime(),
+              balance: this.user.balance
+            }).then(function(ref) {
+              // Add key to record
+              var memberKey = ref.key;
+              var member = $rootScope.members.$getRecord(memberKey);
+              member.key = memberKey;
+              $rootScope.members.$save(member).then(function(ref) {
+                console.log("Sucessfully saved member " + ref.key);
+              });
+              $rootScope.members.$indexFor(memberKey);
+            }).catch(function(errors) {
+              console.log('Errors:' + errors);
             });
-            members.$indexFor(memberKey);
-          }).catch(function(errors) {
-            console.log('Errors:' + errors);
+          };
+
+          $scope.redirectTo = function() {
+            $location.path('/members/'+this.member.key);
+          };
+
+          $rootScope.members = $firebaseArray($rootScope.membersRef);
+
+          var membersObject = $firebaseObject($rootScope.membersRef);
+          membersObject.$bindTo($scope,'members');
+        })
+        .controller('Member',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+          $rootScope.membersRef = firebase.database().ref().child('members');
+          $rootScope.tnxRef = firebase.database().ref().child('transactions');
+          var memberKey = $location.path().split('/')[2].toString();
+          $rootScope.members = $firebaseArray($rootScope.membersRef);
+          var transactions = $firebaseArray($rootScope.tnxRef);
+
+          $rootScope.members.$loaded().then(function(ref) {
+            $scope.member = $rootScope.members.$getRecord(memberKey);
+            var memberIndex = $rootScope.members.$indexFor(memberKey);
           });
-        };
 
-        $scope.redirectTo = function() {
-          $location.path('/members/'+this.member.key);
-        };
+          $scope.addPayment = function() {
+            var transactions = $firebaseArray($rootScope.tnxRef);
 
-        $scope.members = $firebaseArray(membersRef);
+            transactions.$add({
+              memberId: $scope.member.$id,
+              date: this.transaction.date.getTime(),
+              amount: this.transaction.amount,
+            }).then(function(ref) {
+              // Add key to record
+              var tnxKey = ref.key;
+              var tnx = transactions.$getRecord(tnxKey);
+              tnx.$save(tnx).then(function(ref) {
+                console.log("Sucessfully saved transaction " + ref.key);
+              });
+              tnx.$indexFor(tnxKey);
+            }).catch(function(errors) {
+              console.log('Errors:' + errors);
+            });
+          };
 
-        var membersObject = $firebaseObject(membersRef);
-        membersObject.$bindTo($scope,'members');
-      })
-      .controller('Member',function($scope,$location,$firebaseArray,$firebaseObject) {
-        var membersRef = firebase.database().ref().child('members');
-        var tnxRef = firebase.database().ref().child('transactions');
-        var memberKey = $location.path().split('/')[2].toString();
-        var members = $firebaseArray(membersRef);
-        var transactions = $firebaseArray(tnxRef);
+          var tnxQuery = $rootScope.tnxRef.orderByChild('memberId').equalTo(memberKey);
+          $scope.transactions = $firebaseArray(tnxQuery);
+          var tnxObject = $firebaseObject(tnxQuery);
+          tnxObject.$bindTo($scope,'transactions');
 
-        members.$loaded().then(function(ref) {
-          $scope.member = members.$getRecord(memberKey);
-          var memberIndex = members.$indexFor(memberKey);
         });
 
-        $scope.addPayment = function() {
-          var transactions = $firebaseArray(tnxRef);
-
-          transactions.$add({
-            memberId: $scope.member.$id,
-            date: this.transaction.date.getTime(),
-            amount: this.transaction.amount,
-          }).then(function(ref) {
-            // Add key to record
-            var tnxKey = ref.key;
-            var tnx = transactions.$getRecord(tnxKey);
-            tnx.$save(tnx).then(function(ref) {
-              console.log("Sucessfully saved transaction " + ref.key);
-            });
-            tnx.$indexFor(tnxKey);
-          }).catch(function(errors) {
-            console.log('Errors:' + errors);
-          });
-        };
-
-        $scope.members = $firebaseArray(membersRef);
-        var membersObject = $firebaseObject(membersRef);
-        membersObject.$bindTo($scope,'members');
-
-        $scope.transactions = $firebaseArray(tnxRef);
-        var tnxObject = $firebaseObject(tnxRef);
-        tnxObject.$bindTo($scope,'transactions');
-
-      });
+      sji98
+        .factory('MembersService',function() {
+          return $firebaseArray.$extend({
+            addMember: function() {
+            },
+            getAllMembers: function() {
+            },
+            getMember: function() {
+            },
+            searchMember: function() {
+            }
+          })
+        });
 
     </script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css" />
