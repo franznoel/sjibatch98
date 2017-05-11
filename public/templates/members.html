@@ -17,37 +17,39 @@ window.members.search = "";
     <section layout="row" layout-md="column" layout-align="left center" layout-wrap>
       <md-input-container flex="25">
         <label>Member Search</label>
-        <input type="text" id="memberSearch" name="memberSearch" ng-model="search" maxlength="100" />
+        <input type="text" id="memberSearch" name="memberSearch" ng-model="search" maxlength="100" member-search="searchMember()" />
       </md-input-container>
     </section>
-    <table id="members-table" class="table table-hover table-bordered table-condensed">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Birthday</th>
-          <th>Payment Due</th>
-          <th>Paid Amount</th>
-          <th>Balance</th>
-          <th>Roles</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-show="!members">
-          <td colspan="8">There are no members.</td>
-        </tr>
-        <tr ng-repeat="member in members" ng-click="redirectTo(this)" class="member">
-          <td>{{member.name}}</td>
-          <td>{{member.email}}</td>
-          <td>{{member.birthdate | date:'MMM d, y'}}</td>
-          <td></td>
-          <td></td>
-          <td>{{member.balance | currency:'$ ':2}}</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <section layout="row" layout-md="column" layout-align="left center" layout-wrap>
+      <table id="members-table" class="table table-hover table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Birthday</th>
+            <th>Payment Due</th>
+            <th>Paid Amount</th>
+            <th>Balance</th>
+            <th>Roles</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-show="!members">
+            <td colspan="8">There are no members.</td>
+          </tr>
+          <tr ng-repeat="member in members" ng-click="redirectTo(this)" class="member">
+            <td>{{member.name}}</td>
+            <td>{{member.email}}</td>
+            <td>{{member.birthdate | date:'MMM d, y'}}</td>
+            <td></td>
+            <td></td>
+            <td>{{member.balance | currency:'$ ':2}}</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 </md-content>
 
