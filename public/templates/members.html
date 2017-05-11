@@ -1,22 +1,3 @@
-<!-- Container #1 (see wireframe) -->
-<!--
-<md-toolbar class="md-default md-toolbar-tools">
-  <div layout="row">
-    <md-toolbar-filter layout layout-align="center center">
-      <h2 style="padding:0;margin:0;">SJI Batch '98</h2>
-      <md-icon md-svg-icon="call:chat"></md-icon>
-    </md-toolbar-filter>
-    <md-menu-bar>
-      <md-menu>
-        <button>Members</button>
-      </md-menu>
-      <md-menu>
-        <button>Logout</button>
-      </md-menu>
-    </md-menu-bar>
-  </div>
-</md-toolbar>
--->
 <md-toolbar>
   <div class="md-toolbar-tools">
     <md-truncate><h1>SJI Batch '98</h1></md-truncate>
@@ -25,21 +6,15 @@
     <md-button class="md-raised">Logout</md-button>
   </div>
 </md-toolbar>
-<!--
-<md-content ng-cloak>
-  <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
-    <h3 class="md-navbar-title" style="margin:10px 5px;">SJI Batch '98</h3>
-    <md-nav-item md-nav-click="goto('members')" name="members">Members</md-nav-item>
-    <md-nav-item md-nav-click="goto('logout')" name="logout">Logout</md-nav-item>
-  </md-nav-bar>
+<md-content layout-padding layout="column">
+  <h3 style="padding:0 auto;margin:0;">Members</h3>
 </md-content>
--->
 <md-content layout-padding layout="row">
   <section>
     <form ng-submit="$event.preventDefault();">
       <md-autocomplete
         md-items="member in members"
-        md-item-text="member.name"
+        md-item-text="member"
         md-floating-label="Member Search">
         <md-item-template>
           <span class="member-info">
