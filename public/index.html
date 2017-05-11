@@ -144,8 +144,9 @@
             });
           };
 
-          $scope.transactions = $firebaseArray($rootScope.tnxRef);
-          var tnxObject = $firebaseObject($rootScope.tnxRef);
+          var tnxQuery = $rootScope.tnxRef.orderByChild('memberId').equalTo(memberKey);
+          $scope.transactions = $firebaseArray(tnxQuery);
+          var tnxObject = $firebaseObject(tnxQuery);
           tnxObject.$bindTo($scope,'transactions');
 
         });
