@@ -36,10 +36,6 @@
 -->
 <md-content layout-padding layout="row">
   <section>
-      <md-button class="md-raised md-primary" style="margin:10px 0;" ng-href="/members/add">Add Member</md-button>
-  </section>
-  <span flex></span>
-  <section>
     <form ng-submit="$event.preventDefault();">
       <md-autocomplete
         md-items="member in members"
@@ -52,6 +48,10 @@
         </md-item-template>
       </md-autocomplete>
     </form>
+  </section>
+  <span flex></span>
+  <section>
+      <md-button class="md-raised md-primary" style="margin:10px 0;" ng-href="/members/add">Add Member</md-button>
   </section>
 </md-content>
 <md-content layout-padding>
