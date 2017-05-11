@@ -58,7 +58,7 @@
               templateUrl: 'templates/login.html'
             })
             .when('/members/add',{
-              controller: 'Members',
+              controller: 'MembersAdd',
               templateUrl: 'templates/members-add.html'
             })
             .when('/members/:id',{
@@ -78,7 +78,7 @@
       });
 
       sji98
-        .controller('Members',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+        .controller('MemberAdd',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
           $rootScope.membersRef = firebase.database().ref().child('members');
 
           $scope.submit = function() {
@@ -102,6 +102,12 @@
               console.log('Errors:' + errors);
             });
           };
+
+        });
+
+      sji98
+        .controller('Members',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+          $rootScope.membersRef = firebase.database().ref().child('members');
 
           $scope.redirectTo = function() {
             $location.path('/members/'+this.member.key);
