@@ -17,10 +17,13 @@
         md-item-text="member"
         md-floating-label="Member Search">
         <md-item-template>
-          <span class="member-info">
-            <span>{{member | json}}</span>
-          </span>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{member.name}}</span>
         </md-item-template>
+        <md-not-found>
+          No members matching "{{ctrl.searchMembers}}".
+          <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+        </md-not-found>
+
       </md-autocomplete>
     </form>
   </section>
