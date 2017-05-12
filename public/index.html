@@ -48,130 +48,130 @@
 
     sji98
       .config(function($locationProvider,$routeProvider,$mdThemingProvider) {
-          $mdThemingProvider.theme('default')
-            .primaryPalette('blue');
+        $mdThemingProvider.theme('default')
+          .primaryPalette('blue');
 
-          $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(true);
 
-          $routeProvider
-            .when('/',{
-              templateUrl: 'templates/login.html'
-            })
-            .when('/members/add',{
-              controller: 'MemberAdd',
-              templateUrl: 'templates/members-add.html'
-            })
-            .when('/members/:id',{
-              controller: 'Member',
-              templateUrl: 'templates/members-id.html'
-            })
-            .when('/members',{
-              controller: 'Members',
-              templateUrl: 'templates/members.html'
-            })
-            .when('/accounts',{
-              templateUrl: 'templates/accounts.html'
-            })
-            .otherwise('/404',{
-              templateUrl: 'templates/404.html'
-            });
+        $routeProvider
+          .when('/',{
+            templateUrl: 'templates/login.html'
+          })
+          .when('/members/add',{
+            controller: 'MemberAdd',
+            templateUrl: 'templates/members-add.html'
+          })
+          .when('/members/:id',{
+            controller: 'Member',
+            templateUrl: 'templates/members-id.html'
+          })
+          .when('/members',{
+            controller: 'Members',
+            templateUrl: 'templates/members.html'
+          })
+          .when('/accounts',{
+            templateUrl: 'templates/accounts.html'
+          })
+          .otherwise('/404',{
+            templateUrl: 'templates/404.html'
+          });
       });
 
-      sji98
-        .controller('MemberAdd',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
-          $rootScope.membersRef = firebase.database().ref().child('members');
+    sji98
+      .controller('MemberAdd', MemberAddController)
+      .controller('Members', MembersController)
+      .controller('Member', MemberController)
+      .factory('MembersService', MemberServiceFactory);
 
-          $scope.submit = function() {
-            $rootScope.members = $firebaseArray($rootScope.membersRef);
+      function MemberAddController($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+        $rootScope.membersRef = firebase.database().ref().child('members');
 
-            $rootScope.members.$add({
-              name: this.user.name,
-              email: this.user.email,
-              birthdate: this.user.birthdate.getTime(),
-              balance: this.user.balance
-            }).then(function(ref) {
-              // Add key to record
-              var memberKey = ref.key;
-              var member = $rootScope.members.$getRecord(memberKey);
-              member.key = memberKey;
-              $rootScope.members.$save(member).then(function(ref) {
-                console.log("Sucessfully saved member " + ref.key);
-              });
-              $rootScope.members.$indexFor(memberKey);
-            }).catch(function(errors) {
-              console.log('Errors:' + errors);
+        $scope.submit = function() {
+          $rootScope.members = $firebaseArray($rootScope.membersRef);
+
+          $rootScope.members.$add({
+            name: this.user.name,
+            email: this.user.email,
+            birthdate: this.user.birthdate.getTime(),
+            balance: this.user.balance
+          }).then(function(ref) {
+            // Add key to record
+            var memberKey = ref.key;
+            var member = $rootScope.members.$getRecord(memberKey);
+            member.key = memberKey;
+            $rootScope.members.$save(member).then(function(ref) {
+              console.log("Sucessfully saved member " + ref.key);
             });
-          };
+            $rootScope.members.$indexFor(memberKey);
+          }).catch(function(errors) {
+            console.log('Errors:' + errors);
+          });
+        };
+      };
 
+      function MemberController($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+        $rootScope.membersRef = firebase.database().ref().child('members');
+        $rootScope.tnxRef = firebase.database().ref().child('transactions');
+        var memberKey = $location.path().split('/')[2].toString();
+        $rootScope.members = $firebaseArray($rootScope.membersRef);
+        var transactions = $firebaseArray($rootScope.tnxRef);
+
+        $rootScope.members.$loaded().then(function(ref) {
+          $scope.member = $rootScope.members.$getRecord(memberKey);
+          var memberIndex = $rootScope.members.$indexFor(memberKey);
         });
 
-      sji98
-        .controller('Members',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
-          $rootScope.membersRef = firebase.database().ref().child('members');
-
-          $scope.redirectTo = function() {
-            $location.path('/members/'+this.member.key);
-          };
-
-          $rootScope.members = $firebaseArray($rootScope.membersRef);
-
-          var membersObject = $firebaseObject($rootScope.membersRef);
-          membersObject.$bindTo($scope,'members');
-        });
-
-      sji98
-        .controller('Member',function($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
-          $rootScope.membersRef = firebase.database().ref().child('members');
-          $rootScope.tnxRef = firebase.database().ref().child('transactions');
-          var memberKey = $location.path().split('/')[2].toString();
-          $rootScope.members = $firebaseArray($rootScope.membersRef);
+        $scope.addPayment = function() {
           var transactions = $firebaseArray($rootScope.tnxRef);
 
-          $rootScope.members.$loaded().then(function(ref) {
-            $scope.member = $rootScope.members.$getRecord(memberKey);
-            var memberIndex = $rootScope.members.$indexFor(memberKey);
-          });
-
-          $scope.addPayment = function() {
-            var transactions = $firebaseArray($rootScope.tnxRef);
-
-            transactions.$add({
-              memberId: $scope.member.$id,
-              date: this.transaction.date.getTime(),
-              amount: this.transaction.amount,
-            }).then(function(ref) {
-              // Add key to record
-              var tnxKey = ref.key;
-              var tnx = transactions.$getRecord(tnxKey);
-              tnx.$save(tnx).then(function(ref) {
-                console.log("Sucessfully saved transaction " + ref.key);
-              });
-              tnx.$indexFor(tnxKey);
-            }).catch(function(errors) {
-              console.log('Errors:' + errors);
+          transactions.$add({
+            memberId: $scope.member.$id,
+            date: this.transaction.date.getTime(),
+            amount: this.transaction.amount,
+          }).then(function(ref) {
+            // Add key to record
+            var tnxKey = ref.key;
+            var tnx = transactions.$getRecord(tnxKey);
+            tnx.$save(tnx).then(function(ref) {
+              console.log("Sucessfully saved transaction " + ref.key);
             });
-          };
+            tnx.$indexFor(tnxKey);
+          }).catch(function(errors) {
+            console.log('Errors:' + errors);
+          });
+        };
 
-          var tnxQuery = $rootScope.tnxRef.orderByChild('memberId').equalTo(memberKey);
-          $scope.transactions = $firebaseArray(tnxQuery);
-          var tnxObject = $firebaseObject(tnxQuery);
-          tnxObject.$bindTo($scope,'transactions');
+        var tnxQuery = $rootScope.tnxRef.orderByChild('memberId').equalTo(memberKey);
+        $scope.transactions = $firebaseArray(tnxQuery);
+        var tnxObject = $firebaseObject(tnxQuery);
+        tnxObject.$bindTo($scope,'transactions');
+      }
 
-        });
+      function MembersController($rootScope,$scope,$location,$firebaseArray,$firebaseObject) {
+        $rootScope.membersRef = firebase.database().ref().child('members');
 
-      sji98
-        .factory('MembersService',function() {
-          return $firebaseArray.$extend({
-            addMember: function() {
-            },
-            getAllMembers: function() {
-            },
-            getMember: function() {
-            },
-            searchMember: function() {
-            }
-          })
-        });
+        $scope.redirectTo = function() {
+          $location.path('/members/'+this.member.key);
+        };
+
+        $rootScope.members = $firebaseArray($rootScope.membersRef);
+
+        var membersObject = $firebaseObject($rootScope.membersRef);
+        membersObject.$bindTo($scope,'members');
+      }
+
+      function MemberServiceFactory() {
+        return $firebaseArray.$extend({
+          addMember: function() {
+          },
+          getAllMembers: function() {
+          },
+          getMember: function() {
+          },
+          searchMember: function() {
+          }
+        })
+      }
 
     </script>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.3/angular-material.min.css" />
