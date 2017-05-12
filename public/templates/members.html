@@ -10,26 +10,27 @@
   <h3 style="padding:0 auto;margin:0;">Members</h3>
 </md-content>
 <md-content layout-padding layout="row">
-  <section>
+  <section flex="20">
     <form ng-submit="$event.preventDefault();">
       <md-autocomplete
         md-items="member in members"
         md-item-text="member"
+        md-search-text-change="Members.searchChange(Members.searchText)"
+        md-search-text="Members.searchText"
         md-floating-label="Member Search">
         <md-item-template>
-          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{member.name}}</span>
+          <span md-highlight-text="Members.searchText" md-highlight-flags="^i">{{member.name}}</span>
         </md-item-template>
         <md-not-found>
-          No members matching "{{ctrl.searchMembers}}".
-          <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+          No members matching "{{Members.searchText}}".
+          <a ng-click="ctrl.newState(Members.searchText)">Create a new one!</a>
         </md-not-found>
-
       </md-autocomplete>
     </form>
   </section>
-  <span flex></span>
+  <span flex="70"></span>
   <section>
-    <md-button class="md-raised md-primary" style="margin:10px 0;" ng-href="/members/add">Add Member</md-button>
+    <md-button class="md-raised md-primary" style="margin:10px 0;" ng-href="/members/add" flex="100">Add Member</md-button>
   </section>
 </md-content>
 <md-content layout-padding>
