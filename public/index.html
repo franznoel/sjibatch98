@@ -154,6 +154,14 @@
           $location.path('/members/'+this.member.key);
         };
 
+        $scope.searchChange = function(text) {
+          $log.info('Changes'+text);
+        }
+
+        var querySearch = function(members) {
+          console.log($rootScope.members);
+        };
+
         $rootScope.members = $firebaseArray($rootScope.membersRef);
 
         var membersObject = $firebaseObject($rootScope.membersRef);

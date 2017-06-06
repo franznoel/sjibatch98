@@ -10,10 +10,12 @@
   <h3 style="padding:0 auto;margin:0;">Members</h3>
 </md-content>
 <md-content layout-padding layout="row">
+
   <section flex="20">
+    <!--
     <form ng-submit="$event.preventDefault();">
       <md-autocomplete
-        md-items="member in members"
+        md-items="member in Members.querySearch(Members.searchText)"
         md-item-text="member"
         md-search-text-change="Members.searchChange(Members.searchText)"
         md-search-text="Members.searchText"
@@ -27,6 +29,7 @@
         </md-not-found>
       </md-autocomplete>
     </form>
+    -->
   </section>
   <span flex="70"></span>
   <section>
